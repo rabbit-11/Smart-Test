@@ -67,10 +67,12 @@
 <script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+<script src="../js/lay-config.js" charset="utf-8"></script>
 <script>
-    layui.use(['form'], function () {
+    layui.use(['form','jquery','cookie'], function () {
         var form = layui.form,
-            layer = layui.layer;
+            $ = layui.jquery,
+            cookie = layui.cookie;
 
         // 登录过期的时候，跳出ifram框架
         if (top.location != self.location) top.location = self.location;
@@ -98,6 +100,8 @@
                 layer.msg('验证码不能为空');
                 return false;
             }
+            $.cookie("username",data.username,{ expires: 7, path: '/' });
+            $.cookie("password",data.password,{ expires: 7, path: '/' });
             layer.msg('登录成功', function () {
                 window.location = '../index.html';
             });
