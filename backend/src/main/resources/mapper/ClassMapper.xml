@@ -6,14 +6,14 @@
     id, `name`, teacher_id
     </sql>
 
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.qzgcsfcc.st.model.Class">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.qzgcsfcc.st.model.ClassInfo">
         select
         <include refid="Base_Column_List" />
         from class
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <select id="selectByTeacherId" parameterType="java.lang.Integer" resultType="com.qzgcsfcc.st.model.Class">
+    <select id="selectByTeacherId" parameterType="java.lang.Integer" resultType="com.qzgcsfcc.st.model.ClassInfo">
         select
         <include refid="Base_Column_List" />
         from class
@@ -26,7 +26,7 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
 
-    <insert id="insert" parameterType="com.qzgcsfcc.st.model.Class">
+    <insert id="insert" parameterType="com.qzgcsfcc.st.model.ClassInfo">
         insert into class
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -58,7 +58,7 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="com.qzgcsfcc.st.model.Class">
+    <update id="updateByPrimaryKey" parameterType="com.qzgcsfcc.st.model.ClassInfo">
         update class
         <set>
             <if test="name != null">

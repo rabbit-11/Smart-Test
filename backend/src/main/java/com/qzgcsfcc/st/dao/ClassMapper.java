@@ -1,5 +1,6 @@
 package com.qzgcsfcc.st.dao;
 
+import com.qzgcsfcc.st.model.ClassInfo;
 import com.qzgcsfcc.st.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -16,11 +17,11 @@ import java.util.List;
 @Repository
 public interface ClassMapper {
 
-    Class selectByPrimaryKey(Integer id);
+    ClassInfo selectByPrimaryKey(Integer id);
 
-    List<Class> selectByTeacherId(Integer teacherId);
+    List<ClassInfo> selectByTeacherId(Integer teacherId);
 
-    int insert(Class classInfo);
+    int insert(ClassInfo classInfo);
 
     int deleteByPrimaryKey(Integer id);
 
