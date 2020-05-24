@@ -1,7 +1,7 @@
 package com.qzgcsfcc.st.service.impl;
 
 import com.qzgcsfcc.st.dao.UserMapper;
-import com.qzgcsfcc.st.model.ApiResult;
+import com.qzgcsfcc.st.model.param.ApiResult;
 import com.qzgcsfcc.st.model.User;
 import com.qzgcsfcc.st.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResult login(User user) {
-        User res = userMapper.query(user);
+        User res = userMapper.select(user);
 
         ApiResult apiResult =  new ApiResult();
 

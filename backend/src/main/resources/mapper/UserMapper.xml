@@ -6,7 +6,7 @@
         name,role,sex,avatar
     </sql>
 
-    <select id="query" parameterType="com.qzgcsfcc.st.model.User" resultType="com.qzgcsfcc.st.model.User">
+    <select id="select" parameterType="com.qzgcsfcc.st.model.User" resultType="com.qzgcsfcc.st.model.User">
         select
         <include refid="Base_Column_List"/>
         from user
@@ -103,7 +103,8 @@
     </update>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-      delete from user
+      update user
+      set status = 0
       where id = #{id,jdbcType=INTEGER}
     </delete>
 </mapper>

@@ -3,6 +3,8 @@ package com.qzgcsfcc.st.dao;
 import com.qzgcsfcc.st.model.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -12,11 +14,13 @@ import org.springframework.stereotype.Repository;
  * @since 2020-5-4
  */
 @Repository
-public interface UserMapper {
+public interface ClassMapper {
 
-    User select(User users);
+    Class selectByPrimaryKey(Integer id);
 
-    int insert(User user);
+    List<Class> selectByTeacherId(Integer teacherId);
+
+    int insert(Class classInfo);
 
     int deleteByPrimaryKey(Integer id);
 

@@ -1,6 +1,6 @@
 package com.qzgcsfcc.st.api;
 
-import com.qzgcsfcc.st.model.ApiResult;
+import com.qzgcsfcc.st.model.param.ApiResult;
 import com.qzgcsfcc.st.model.User;
 import com.qzgcsfcc.st.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

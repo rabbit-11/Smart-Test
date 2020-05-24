@@ -1,5 +1,6 @@
-package com.qzgcsfcc.st.model;
+package com.qzgcsfcc.st.model.param;
 
+import com.qzgcsfcc.st.model.constants.StatusConstants;
 import lombok.Data;
 
 import java.io.Serializable;

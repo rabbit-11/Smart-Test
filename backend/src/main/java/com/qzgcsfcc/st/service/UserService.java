@@ -1,6 +1,6 @@
 package com.qzgcsfcc.st.service;
 
-import com.qzgcsfcc.st.model.ApiResult;
+import com.qzgcsfcc.st.model.param.ApiResult;
 import com.qzgcsfcc.st.model.User;
 import org.springframework.stereotype.Service;
 

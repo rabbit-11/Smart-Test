@@ -1,4 +1,4 @@
-package com.qzgcsfcc.st.model;
+package com.qzgcsfcc.st.model.constants;
 
 /**
  * @author hanbing
