@@ -19,6 +19,5 @@ public interface AnswerMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-
     int updateByPrimaryKey(Answer answer);
 }
