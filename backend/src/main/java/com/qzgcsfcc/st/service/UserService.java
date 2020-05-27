@@ -16,4 +16,10 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
     ApiResult login(User user);
+
+    ApiResult edit(User user);
+
+    ApiResult delete(Integer id);
+
+    ApiResult getClassInfo(Integer id);
 }

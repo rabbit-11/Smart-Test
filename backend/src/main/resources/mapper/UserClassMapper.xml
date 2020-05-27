@@ -9,6 +9,21 @@
     <sql id="Base_Column_List">
         id, user_id, class_id
     </sql>
+
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultType="com.qzgcsfcc.st.model.dto.ClassDto">
+        select
+        b.id,
+        b.name as className,
+        c.name as teacherName
+        from user_class a
+        left join class b on a.class_id = b.id
+        left join user c on b.teacher_id = c.id
+        <where>
+            a.user_id = #{id,jdbcType=INTEGER}
+            and b.status = 1
+        </where>
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from user_class
         where id = #{id,jdbcType=INTEGER}

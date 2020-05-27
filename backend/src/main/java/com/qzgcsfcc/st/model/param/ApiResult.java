@@ -21,17 +21,6 @@ public class ApiResult implements Serializable {
     private Integer status;
     private String msg;
 
-    /**
-     * 当前查询返回的结果数
-     */
-    private Long recordsTotal;
-
-    /**
-     * 总的结果数
-     */
-    private Integer totalCount;
-
-    private Integer perPageCount;
 
     private Object data;
 

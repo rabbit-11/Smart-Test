@@ -1,6 +1,7 @@
 package com.qzgcsfcc.st.dao;
 
 import com.qzgcsfcc.st.model.User;
+import com.qzgcsfcc.st.model.dto.ClassDto;
 import org.springframework.stereotype.Repository;
 
 /**

@@ -6,6 +6,14 @@
     id, `name`, teacher_id
     </sql>
 
+    <select id="selectStu" parameterType="java.lang.Integer" resultType="com.qzgcsfcc.st.model.User">
+        select c.id,c.name
+        from class a
+        left join user_class b on a.id = b.class_id
+        left join user c on b.user_id = c.id
+        where a.id = #{id,jdbcType=INTEGER}
+    </select>
+
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.qzgcsfcc.st.model.ClassInfo">
         select
         <include refid="Base_Column_List" />

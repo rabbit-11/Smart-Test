@@ -17,6 +17,8 @@ import java.util.List;
 @Repository
 public interface ClassMapper {
 
+    List<User> selectStu(Integer id);
+
     ClassInfo selectByPrimaryKey(Integer id);
 
     List<ClassInfo> selectByTeacherId(Integer teacherId);

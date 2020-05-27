@@ -3,7 +3,7 @@
 <mapper namespace="com.qzgcsfcc.st.dao.UserMapper">
 
     <sql id="Base_Column_List">
-        name,role,sex,avatar
+        id,name,role,sex,avatar
     </sql>
 
     <select id="select" parameterType="com.qzgcsfcc.st.model.User" resultType="com.qzgcsfcc.st.model.User">
@@ -16,6 +16,7 @@
             and status = 1
         </where>
     </select>
+
 
 
     <insert id="insert" parameterType="com.qzgcsfcc.st.model.User">
