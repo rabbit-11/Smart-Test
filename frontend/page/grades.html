@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 
 <!DOCTYPE html>
 <html>
@@ -26,52 +28,31 @@
     </style>
 </head>
 <body>
-<table class="layui-table">
-    <colgroup>
-        <col width="150">
-        <col width="200">
-        <col>
-    </colgroup>
-    <thead>
-    <tr>
-        <th>姓名</th>
-        <th>正确率</th>
-        <th>花费时间</th>
-        <th>最终分数</th>
-        <th>排名</th>
-
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>祝强</td>
-        <td>90.1%</td>
-        <td>1:20:23</td>
-        <td>92</td>
-        <td>1</td>
-    </tr>
-    <tr>
-        <td>许闲心</td>
-        <td>89.1%</td>
-        <td>1:30:23</td>
-        <td>87</td>
-        <td>2</td>
-    </tr>
-    <tr>
-        <td>刘能</td>
-        <td>88.1%</td>
-        <td>1:30:23</td>
-        <td>86</td>
-        <td>3</td>
-    </tr>
-    </tbody>
-</table>
 <div>
     <div id="page_container"></div>
 </div>
-
+<div id= "grades" style="weight:400px; height: 200px"></div>
 
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['echarts'], function () {
+    var echarts = layui.echarts;
+    var myChart = echarts.init(document.getElementById('grades'));
+    var option = {
+        xAxis: {
+            data: [],
+        },
+        yAxis: {},
+        series: [{
+            name: '销量',
+            type: 'line',
+            data: [5, 20, 36, 10, 10, 20]
+        }]
+    };
 
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+});
+</script>
 </body>
 </html>

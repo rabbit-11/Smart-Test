@@ -43,25 +43,25 @@
           "child": [
             {
               "title": "随机选题",
-              "href": "page/welcome-1.html",
+              "href": "page/choose.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "错题记录",
-              "href": "page/welcome-2.html",
+              "href": "page/wrong.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "历史练习",
-              "href": "page/welcome-1.html",
+              "href": "page/history.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "自主改卷",
-              "href": "page/welcome-2.html",
+              "href": "page/correct.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
@@ -69,7 +69,7 @@
         },
         {
           "title": "考试安排",
-          "href": "page/setting.html",
+          "href": "page/arrange.html",
           "icon": "fa fa-gears",
           "target": "_self"
         }
@@ -77,7 +77,7 @@
     },
     {
       "title": "我的班级",
-      "icon": "fa fa-lemon-o",
+
       "href": "",
       "target": "_self",
       "child": [
@@ -91,25 +91,24 @@
     },
     {
       "title": "统计分析",
-      "icon": "fa fa-slideshare",
       "href": "",
       "target": "_self",
       "child": [
         {
           "title": "错题统计",
-          "href": "page/error.html",
+          "href": "page/wrong_count.html",
           "icon": "fa fa-superpowers",
           "target": "_self"
         },
         {
           "title": "易错点归纳",
-          "href": "page/error.html",
+          "href": "page/count.html",
           "icon": "fa fa-superpowers",
           "target": "_self"
         },
         {
           "title": "成绩统计",
-          "href": "page/error.html",
+          "href": "page/grades.html",
           "icon": "fa fa-superpowers",
           "target": "_self"
         }
@@ -123,7 +122,7 @@
       "child": [
         {
           "title": "消息管理",
-          "href": "page/error.html",
+          "href": "page/message.html",
           "icon": "fa fa-superpowers",
           "target": "_self"
         }
