@@ -18,11 +18,24 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <select id="selectByCreator" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectAll" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from library
-        where creator = #{creator,jdbcType=INTEGER}
+        <where>
+            status = 1
+            <if test="creator != null">
+                and creator = #{creator,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllQuestion" parameterType="java.lang.Integer" resultType="com.qzgcsfcc.st.model.Question">
+        select c.id,c.content,c.answer,c.create_at,c.creator,c.type
+        from library a
+        left join question_library b on a.id = b.library_id
+        left join question c on b.question_id = c.id
+        where a.id = #{id,jdbcType=INTEGER} and c.status = 1 and a.status = 1
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

@@ -1,6 +1,7 @@
 package com.qzgcsfcc.st.dao;
 
 import com.qzgcsfcc.st.model.Library;
+import com.qzgcsfcc.st.model.Question;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +20,9 @@ public interface LibraryMapper {
 
     Library selectByPrimaryKey(Integer id);
 
-    List<Library> selectByCreator(Integer creator);
+    List<Question> selectAllQuestion(Integer id);
+
+    List<Library> selectAll(Library library);
 
     int insert(Library library);
 

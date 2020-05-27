@@ -11,6 +11,11 @@
         id, library_id, question_id
     </sql>
 
+    <delete id="delete" parameterType="com.qzgcsfcc.st.model.relationship.QuestionLibrary">
+      delete from question_library
+      where library_id =#{libraryId} and question_id = #{questionId}
+    </delete>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
       delete from question_library
       where id = #{id,jdbcType=INTEGER}

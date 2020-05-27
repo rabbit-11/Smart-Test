@@ -17,6 +17,8 @@ public interface QLMapper {
 
     int insert(QuestionLibrary questionLibrary);
 
+    int delete(QuestionLibrary questionLibrary);
+
     int deleteByPrimaryKey(Integer id);
 
     int updateByPrimaryKey(QuestionLibrary questionLibrary);
