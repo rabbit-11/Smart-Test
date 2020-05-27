@@ -1,5 +1,6 @@
 package com.qzgcsfcc.st.service;
 
+import com.qzgcsfcc.st.model.ClassInfo;
 import com.qzgcsfcc.st.model.User;
 import com.qzgcsfcc.st.model.param.ApiResult;
 import com.qzgcsfcc.st.model.relationship.UserClass;
@@ -18,7 +19,13 @@ public interface ClassService {
 
     ApiResult getStu(Integer id);
 
-    ApiResult add(UserClass userClass);
+    ApiResult addStu(UserClass userClass);
 
-    ApiResult delete(UserClass userClass);
+    ApiResult deleteStu(UserClass userClass);
+
+    ApiResult delete(Integer id);
+
+    ApiResult add(ClassInfo classInfo);
+
+    ApiResult edit(ClassInfo classInfo);
 }

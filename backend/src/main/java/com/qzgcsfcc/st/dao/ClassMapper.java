@@ -2,6 +2,7 @@ package com.qzgcsfcc.st.dao;
 
 import com.qzgcsfcc.st.model.ClassInfo;
 import com.qzgcsfcc.st.model.User;
+import com.qzgcsfcc.st.model.relationship.UserClass;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,5 +28,5 @@ public interface ClassMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int updateByPrimaryKey(User user);
+    int updateByPrimaryKey(ClassInfo classInfo);
 }

@@ -34,6 +34,7 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
 
+
     <insert id="insert" parameterType="com.qzgcsfcc.st.model.ClassInfo">
         insert into class
         <trim prefix="(" suffix=")" suffixOverrides=",">

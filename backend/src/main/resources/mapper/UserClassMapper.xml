@@ -24,6 +24,11 @@
         </where>
     </select>
 
+    <delete id="delete" parameterType="com.qzgcsfcc.st.model.relationship.UserClass">
+        delete from user_class
+        where class_id = #{classId} and user_id = #{userId}
+    </delete>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from user_class
         where id = #{id,jdbcType=INTEGER}

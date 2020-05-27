@@ -22,6 +22,8 @@ public interface UserClassMapper {
 
     int insert(UserClass userClass);
 
+    int delete(UserClass userClass);
+
     int deleteByPrimaryKey(Integer id);
 
     int updateByPrimaryKey(UserClass userClass);

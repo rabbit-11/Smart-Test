@@ -3,6 +3,7 @@ package com.qzgcsfcc.st.service.impl;
 import com.qzgcsfcc.st.dao.ClassMapper;
 import com.qzgcsfcc.st.dao.UserClassMapper;
 import com.qzgcsfcc.st.dao.UserMapper;
+import com.qzgcsfcc.st.model.ClassInfo;
 import com.qzgcsfcc.st.model.User;
 import com.qzgcsfcc.st.model.dto.ClassDto;
 import com.qzgcsfcc.st.model.param.ApiResult;
@@ -28,6 +29,8 @@ public class ClassServiceImpl implements ClassService {
 
     @Autowired
     private ClassMapper classMapper;
+    @Autowired
+    private UserClassMapper userClassMapper;
 
 
     @Override
@@ -42,12 +45,52 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public ApiResult add(UserClass userClass) {
-        return null;
+    public ApiResult addStu(UserClass userClass) {
+
+        userClassMapper.insert(userClass);
+
+        ApiResult apiResult =  new ApiResult();
+
+        return apiResult;
     }
 
     @Override
-    public ApiResult delete(UserClass userClass) {
-        return null;
+    public ApiResult deleteStu(UserClass userClass) {
+
+        userClassMapper.delete(userClass);
+
+        ApiResult apiResult =  new ApiResult();
+
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult delete(Integer id) {
+
+        classMapper.deleteByPrimaryKey(id);
+
+        ApiResult apiResult =  new ApiResult();
+
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult add(ClassInfo classInfo) {
+
+        classMapper.insert(classInfo);
+
+        ApiResult apiResult =  new ApiResult();
+
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult edit(ClassInfo classInfo) {
+
+        classMapper.updateByPrimaryKey(classInfo);
+
+        ApiResult apiResult =  new ApiResult();
+
+        return apiResult;
     }
 }

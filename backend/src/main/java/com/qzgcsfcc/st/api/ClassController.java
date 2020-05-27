@@ -1,6 +1,6 @@
 package com.qzgcsfcc.st.api;
 
-import com.qzgcsfcc.st.model.User;
+import com.qzgcsfcc.st.model.ClassInfo;
 import com.qzgcsfcc.st.model.param.ApiResult;
 import com.qzgcsfcc.st.model.relationship.UserClass;
 import com.qzgcsfcc.st.service.ClassService;
@@ -30,15 +30,34 @@ public class ClassController {
         return classService.getStu(id);
     }
 
+
     @ResponseBody
-    @RequestMapping("/add")
-    public ApiResult add(@RequestBody UserClass userClass) {
-        return classService.add(userClass);
+    @RequestMapping("/addStu")
+    public ApiResult addStu(@RequestBody UserClass userClass) {
+        return classService.addStu(userClass);
     }
 
     @ResponseBody
-    @RequestMapping("/delete")
-    public ApiResult delete(@RequestBody UserClass userClass) {
-        return classService.delete(userClass);
+    @RequestMapping("/deleteStu")
+    public ApiResult deleteStu(@RequestBody UserClass userClass) {
+        return classService.deleteStu(userClass);
+    }
+
+    @ResponseBody
+    @RequestMapping("/add")
+    public ApiResult add(@RequestBody ClassInfo classInfo) {
+        return classService.add(classInfo);
+    }
+
+    @ResponseBody
+    @RequestMapping("/edit")
+    public ApiResult edit(@RequestBody ClassInfo classInfo) {
+        return classService.edit(classInfo);
+    }
+
+    @ResponseBody
+    @GetMapping("/delete")
+    public ApiResult del(Integer id) {
+        return classService.delete(id);
     }
 }
