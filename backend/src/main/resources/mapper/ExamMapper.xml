@@ -12,15 +12,34 @@
         <result column="class_id" jdbcType="INTEGER" property="classId" />
         <result column="status" jdbcType="INTEGER" property="status" />
     </resultMap>
+
     <sql id="Base_Column_List">
-      id, `name`, paper_id, create_at, creator, start_time, end_time, class_id, `status`
+      id, `name`, paper_id, creator, start_time, end_time, class_id
     </sql>
+
+    <sql id="Dto_Column_List">
+      exam.id, exam.`name`, exam.paper_id, exam.creator, exam.start_time, exam.end_time, exam.class_id
+    </sql>
+
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from exam
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="selectByClass" parameterType="java.lang.Integer" resultType="com.qzgcsfcc.st.model.dto.ExamDto">
+        select
+        <include refid="Dto_Column_List" />
+        ,b.name as teacherName,
+        c.name as paperName
+        from exam
+        left join user b on exam.creator = b.id
+        left join paper c on exam.paper_id = c.id
+        where exam.class_id = #{id,jdbcType=INTEGER} and exam.status = 1
+    </select>
+
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
       update exam
       set status = 0

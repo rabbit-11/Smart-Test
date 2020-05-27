@@ -1,7 +1,10 @@
 package com.qzgcsfcc.st.dao;
 
 import com.qzgcsfcc.st.model.Exam;
+import com.qzgcsfcc.st.model.dto.ExamDto;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,4 +24,8 @@ public interface ExamMapper {
     int deleteByPrimaryKey(Integer id);
 
     int updateByPrimaryKey(Exam exam);
+
+    List<ExamDto> selectByClass(Integer id);
+
+    List<ExamDto> selectByUser(Integer id);
 }
