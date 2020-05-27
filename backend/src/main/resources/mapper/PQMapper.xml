@@ -11,6 +11,10 @@
       id, paper_id, question_id,score
     </sql>
 
+    <delete id="delete" parameterType="com.qzgcsfcc.st.model.relationship.PaperQuestion">
+        delete from paper_question
+        where question_id = #{questionId} and paper_id = #{paperId}
+    </delete>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from paper_question

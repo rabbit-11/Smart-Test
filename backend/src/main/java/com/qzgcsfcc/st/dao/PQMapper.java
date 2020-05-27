@@ -18,6 +18,8 @@ public interface PQMapper {
 
     int insert(PaperQuestion paperQuestion);
 
+    int delete(PaperQuestion paperQuestion);
+
     int deleteByPrimaryKey(Integer id);
 
     int updateByPrimaryKey(PaperQuestion paperQuestion);
