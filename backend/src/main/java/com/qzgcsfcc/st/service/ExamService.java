@@ -19,4 +19,6 @@ public interface ExamService {
     ApiResult getByClass(Integer id);
 
     ApiResult getByUser(Integer id);
+
+    ApiResult openExam(Integer id);
 }

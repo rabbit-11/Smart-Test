@@ -28,4 +28,6 @@ public interface ExamMapper {
     List<ExamDto> selectByClass(Integer id);
 
     List<ExamDto> selectByUser(Integer id);
+
+    int openExam(Integer id);
 }

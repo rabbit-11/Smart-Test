@@ -23,6 +23,12 @@ public class AnswerController {
     AnswerService answerService;
 
     @ResponseBody
+    @RequestMapping("/getByUser")
+    public ApiResult getByUser(@RequestBody Answer answer) {
+        return answerService.getByUser(answer);
+    }
+
+    @ResponseBody
     @RequestMapping("/add")
     public ApiResult add(@RequestBody Answer answer) {
         return answerService.add(answer);

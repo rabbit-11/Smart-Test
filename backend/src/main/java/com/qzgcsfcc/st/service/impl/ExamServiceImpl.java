@@ -61,4 +61,11 @@ public class ExamServiceImpl implements ExamService {
         apiResult.success(exams);
         return apiResult;
     }
+
+    @Override
+    public ApiResult openExam(Integer id) {
+        examMapper.openExam(id);
+        ApiResult apiResult = new ApiResult();
+        return apiResult;
+    }
 }

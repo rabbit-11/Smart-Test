@@ -10,6 +10,8 @@ import com.qzgcsfcc.st.model.param.ApiResult;
 
 public interface AnswerService {
 
+    ApiResult getByUser(Answer answer);
+
     ApiResult add(Answer answer);
 
     ApiResult edit(Answer answer);

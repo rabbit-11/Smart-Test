@@ -52,4 +52,10 @@ public class ExamController {
     public ApiResult getByUser(Integer userId) {
         return examService.getByUser(userId);
     }
+
+    @ResponseBody
+    @GetMapping("/openExam")
+    public ApiResult openExam(Integer id) {
+        return examService.openExam(id);
+    }
 }

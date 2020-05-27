@@ -14,11 +14,11 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-      id, `name`, paper_id, creator, start_time, end_time, class_id
+      id, `name`, paper_id, creator, start_time, end_time, class_id,is_read
     </sql>
 
     <sql id="Dto_Column_List">
-      exam.id, exam.`name`, exam.paper_id, exam.creator, exam.start_time, exam.end_time, exam.class_id
+      exam.id, exam.`name`, exam.paper_id, exam.creator, exam.start_time, exam.end_time, exam.class_id,exam.is_read
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -45,6 +45,13 @@
       set status = 0
       where id = #{id,jdbcType=INTEGER}
     </delete>
+
+    <update id="openExam" parameterType="com.qzgcsfcc.st.model.Exam">
+        update exam
+        set is_read = 1
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
     <insert id="insert" parameterType="com.qzgcsfcc.st.model.Exam">
         insert into exam
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -71,6 +78,9 @@
             </if>
             <if test="classId != null">
                 class_id,
+            </if>
+            <if test="isRead != null">
+                is_read,
             </if>
             <if test="status != null">
                 `status`,
@@ -101,6 +111,9 @@
             <if test="classId != null">
                 #{classId,jdbcType=INTEGER},
             </if>
+            <if test="isRead != null">
+                #{isRead,jdbcType=INTEGER},
+            </if>
             <if test="status != null">
                 #{status,jdbcType=INTEGER},
             </if>
@@ -129,6 +142,9 @@
             </if>
             <if test="classId != null">
                 class_id = #{classId,jdbcType=INTEGER},
+            </if>
+            <if test="isRead != null">
+                is_read = #{isRead,jdbcType=INTEGER},
             </if>
             <if test="status != null">
                 `status` = #{status,jdbcType=INTEGER},

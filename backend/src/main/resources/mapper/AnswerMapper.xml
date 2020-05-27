@@ -9,14 +9,29 @@
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="score" jdbcType="INTEGER" property="score" />
     </resultMap>
+
     <sql id="Base_Column_List">
-       id, user_id, exam_id, question_id, content, score
+       answer.id, answer.user_id, answer.exam_id, answer.question_id, answer.content, answer.score
     </sql>
+
+    <select id="selectByUser" parameterType="com.qzgcsfcc.st.model.Answer" resultType="com.qzgcsfcc.st.model.Answer">
+        select
+        <include refid="Base_Column_List"/>
+        from answer
+        left join exam on answer.exam_id = exam.id
+        <where>
+            user_id = #{userId}
+            and exam_id = #{examId}
+            and exam.is_read = 1
+        </where>
+    </select>
+
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
       delete from answer
       where id = #{id,jdbcType=INTEGER}
     </delete>
+
     <insert id="insert" parameterType="com.qzgcsfcc.st.model.Answer">
         insert into answer
         <trim prefix="(" suffix=")" suffixOverrides=",">

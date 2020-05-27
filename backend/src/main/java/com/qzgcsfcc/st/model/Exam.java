@@ -28,5 +28,7 @@ public class Exam {
 
     private Integer classId;
 
+    private Integer isRead;
+
     private Integer status;
 }
