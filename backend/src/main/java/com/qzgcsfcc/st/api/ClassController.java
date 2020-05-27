@@ -2,6 +2,7 @@ package com.qzgcsfcc.st.api;
 
 import com.qzgcsfcc.st.model.User;
 import com.qzgcsfcc.st.model.param.ApiResult;
+import com.qzgcsfcc.st.model.relationship.UserClass;
 import com.qzgcsfcc.st.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,15 +30,15 @@ public class ClassController {
         return classService.getStu(id);
     }
 
-//    @ResponseBody
-//    @RequestMapping("/add")
-//    public ApiResult add(@RequestBody User user) {
-//        return classService.add(user);
-//    }
-//
-//    @ResponseBody
-//    @GetMapping("/delete")
-//    public ApiResult delete(Integer id) {
-//        return classService.delete(id);
-//    }
+    @ResponseBody
+    @RequestMapping("/add")
+    public ApiResult add(@RequestBody UserClass userClass) {
+        return classService.add(userClass);
+    }
+
+    @ResponseBody
+    @RequestMapping("/delete")
+    public ApiResult delete(@RequestBody UserClass userClass) {
+        return classService.delete(userClass);
+    }
 }

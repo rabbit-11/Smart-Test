@@ -6,6 +6,7 @@ import com.qzgcsfcc.st.dao.UserMapper;
 import com.qzgcsfcc.st.model.User;
 import com.qzgcsfcc.st.model.dto.ClassDto;
 import com.qzgcsfcc.st.model.param.ApiResult;
+import com.qzgcsfcc.st.model.relationship.UserClass;
 import com.qzgcsfcc.st.service.ClassService;
 import com.qzgcsfcc.st.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,15 @@ public class ClassServiceImpl implements ClassService {
 
         apiResult.success(res);
         return apiResult;
+    }
+
+    @Override
+    public ApiResult add(UserClass userClass) {
+        return null;
+    }
+
+    @Override
+    public ApiResult delete(UserClass userClass) {
+        return null;
     }
 }
