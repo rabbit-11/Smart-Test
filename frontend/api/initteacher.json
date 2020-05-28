@@ -1,11 +1,11 @@
 {
   "homeInfo": {
     "title": "首页",
-    "href": "page/welcome-1.html?t=1"
+    "href": "welcome-1.html?t=1"
   },
   "logoInfo": {
     "title": "Smart Test",
-    "image": "images/logo.png",
+    "image": "../images/logo.png",
     "href": ""
   },
   "menuInfo": [
@@ -16,62 +16,50 @@
       "target": "_self",
       "child": [
         {
-          "title": "我的考试",
+          "title": "考试设计",
           "href": "",
           "icon": "fa fa-home",
           "target": "_self",
           "child": [
             {
-              "title": "参加考试",
-              "href": "page/welcome-1.html",
+              "title": "题库管理",
+              "href": "welcome-1.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
-              "title": "历史试卷",
-              "href": "page/welcome-2.html",
+              "title": "试卷管理",
+              "href": "welcome-2.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
           ]
         },
         {
-          "title": "题目练习",
+          "title": "考试管理",
           "href": "",
           "icon": "fa fa-home",
           "target": "_self",
           "child": [
             {
-              "title": "随机选题",
-              "href": "page/choose.html",
+              "title": "考试安排",
+              "href": "choose.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
-              "title": "错题记录",
-              "href": "page/wrong.html",
+              "title": "人工改卷",
+              "href": "wrong.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
-              "title": "历史练习",
-              "href": "page/history.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
-            },
-            {
-              "title": "自主改卷",
-              "href": "page/correct.html",
+              "title": "自动改卷",
+              "href": "history.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
           ]
-        },
-        {
-          "title": "考试安排",
-          "href": "page/arrange.html",
-          "icon": "fa fa-gears",
-          "target": "_self"
         }
       ]
     },
@@ -83,7 +71,7 @@
       "child": [
         {
           "title": "班级统计",
-          "href": "page/icon.html",
+          "href": "icon.html",
           "icon": "fa fa-dot-circle-o",
           "target": "_self"
         }
@@ -96,19 +84,19 @@
       "child": [
         {
           "title": "错题统计",
-          "href": "page/wrong_count.html",
+          "href": "wrong_count.html",
           "icon": "fa fa-superpowers",
           "target": "_self"
         },
         {
           "title": "易错点归纳",
-          "href": "page/count.html",
+          "href": "count.html",
           "icon": "fa fa-superpowers",
           "target": "_self"
         },
         {
           "title": "成绩统计",
-          "href": "page/grades.html",
+          "href": "grades.html",
           "icon": "fa fa-superpowers",
           "target": "_self"
         }
@@ -122,7 +110,7 @@
       "child": [
         {
           "title": "消息管理",
-          "href": "page/message.html",
+          "href": "message.html",
           "icon": "fa fa-superpowers",
           "target": "_self"
         }
