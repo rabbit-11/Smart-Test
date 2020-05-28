@@ -28,30 +28,185 @@
     </style>
 </head>
 <body>
-<div>
-    <div id="page_container"></div>
+<div class="layui-card" style="width:100%;min-height:500px">
+    <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>考试记录</div>
+    <div class="layui-card-body">
+        <div id="echarts-records" style="width: 50%;min-height:300px;float:left"></div>
+    </div>
+    <div class="layui-card-body" >
+        <div id="range" style="width: 50%;min-height:300px;float:left;margin-top:0px"></div>
+    </div>
+</div>
+<div class="layui-card" style="width:100%;min-height:500px">
+
+    <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>练习记录</div>
+    <div class="layui-card-body">
+        <div id="practice-records" style="width: 50%;min-height:300px;float:left"></div>
+    </div>
+    <div class="layui-card-body">
+        <div id="correct" style="width: 50%;min-height:300px;float:left;margin-top:0px"></div>
+    </div>
 </div>
 <div id= "grades" style="weight:400px; height: 200px"></div>
-
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
 layui.use(['echarts'], function () {
     var echarts = layui.echarts;
-    var myChart = echarts.init(document.getElementById('grades'));
-    var option = {
-        xAxis: {
-            data: [],
-        },
-        yAxis: {},
-        series: [{
-            name: '销量',
-            type: 'line',
-            data: [5, 20, 36, 10, 10, 20]
-        }]
-    };
+    var echartsRecords = echarts.init(document.getElementById('echarts-records'));
+    var range = echarts.init(document.getElementById('range'));
+    var practiceRecords = echarts.init(document.getElementById('practice-records'));
+    var correct = echarts.init(document.getElementById('correct'));
+        var optionRecords = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['考试分数']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['第一周周考','第二周周考','第三周周考','月考','期中考','复习考','期末考']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:'考试分数',
+                    type:'line',
+                    data:[120, 132, 101, 134, 90, 130, 110]
+                },
 
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+            ]
+        };
+        var optionRange = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['考试排名']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['第一周周考','第二周周考','第三周周考','月考','期中考','复习考','期末考']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:'考试排名',
+                    type:'line',
+                    data:[5, 1, 10, 3, 15, 4, 5]
+                },
+
+            ]
+        };
+        var optionCorrect = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['正确率']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['第一次','第二次','第三次','第四次','第五次','第六次']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:'正确率',
+                    type:'line',
+                    data:[0.89, 0.9, 0.77, 0.87, 0.85, 0.86, 0.85]
+                },
+            ]
+        };
+        var optionPractice = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['练习分数']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['第一次','第二次','第三次','第四次','第五次','第六次']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:'练习分数',
+                    type:'line',
+                    data:[105, 111, 123, 113, 105, 114, 105]
+                },
+            ]
+        };
+
+        echartsRecords.setOption(optionRecords);
+        range.setOption(optionRange);
+        practiceRecords.setOption(optionPractice);
+        correct.setOption(optionCorrect);
+        // echarts 窗口缩放自适应
+        window.onresize = function(){
+            echartsRecords.resize();
+            range.resize();
+            correct.resize();
+            practiveRecords.resize();
+        }
 });
 </script>
 </body>
