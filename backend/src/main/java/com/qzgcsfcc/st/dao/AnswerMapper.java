@@ -3,6 +3,8 @@ package com.qzgcsfcc.st.dao;
 import com.qzgcsfcc.st.model.Answer;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AnswerMapper {
 
+    List<Answer> selectByUser(Answer answer);
 
     int insert(Answer answer);
 
