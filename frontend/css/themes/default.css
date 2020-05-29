@@ -87,6 +87,7 @@
 /*左侧菜单选中字体颜色 leftMenuColorThis */
 .layuimini-menu-left .layui-nav .layui-nav-item a:hover, .layuimini-menu-left .layui-nav .layui-this a, .layuimini-menu-left-zoom.layui-nav .layui-nav-item a:hover, .layuimini-menu-left-zoom.layui-nav .layui-this a {
     color: #ffffff !important;
+    border-left: 5px solid #1e9fff !important;
 }
 
 /**tab选项卡选中颜色 tabActiveColor */
