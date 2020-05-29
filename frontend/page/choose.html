@@ -26,46 +26,72 @@
     </style>
 </head>
 <body>
-<table class="layui-table">
-    <colgroup>
-        <col width="150">
-        <col width="200">
-        <col>
-    </colgroup>
-    <thead>
-    <tr>
-        <th>姓名</th>
-        <th>正确率</th>
-        <th>花费时间</th>
-        <th>最终分数</th>
-        <th>排名</th>
+<div class="layui-card">
+    <div class="layui-card-header">随机选题</div>
+    <div class="layui-card-body">
+        <div>
+        <select name="lesson" lay-verify="">
+            <option value="">请选择课程</option>
+            <option value="010">软件工程</option>
+            <option value="021">软件工程实践</option>
+            <option value="0571">python程序设计</option>
+            <option value="0571">python程序设计实践</option>
+        </select>
+        </div>
+        <div>
+            <p>选择题</p>
+        <select name="select1" lay-verify="">
+            <option value="">第一套</option>
+            <option value="010">第一套</option>
+            <option value="021">第二套</option>
+            <option value="0571">第三套</option>
+            <option value="0571">第四套</option>
+        </select>
+        </div>
+        <div>
+            <p>填空题</p>
+        <select name="select2" lay-verify="">
+            <option value="">第一套</option>
+            <option value="010">第一套</option>
+            <option value="021">第二套</option>
+            <option value="0571">第三套</option>
+            <option value="0571">第四套</option>
+        </select>
+        </div>
+        <div>
+            <p>判断题</p>
+        <select name="select3" lay-verify="">
+            <option value="">第一套</option>
+            <option value="010">第一套</option>
+            <option value="021">第二套</option>
+            <option value="0571">第三套</option>
+            <option value="0571">第四套</option>
+        </select>
+        </div>
+        <div>
+            <p>简答题</p>
+        <select name="select4" lay-verify="">
+            <option value="">第一套</option>
+            <option value="010">第一套</option>
+            <option value="021">第二套</option>
+            <option value="0571">第三套</option>
+            <option value="0571">第四套</option>
+        </select>
+        </div>
+        <div>
+            <p>论述题</p>
+        <select name="select5" lay-verify="">
+            <option value="">第一套</option>
+            <option value="010">第一套</option>
+            <option value="021">第二套</option>
+            <option value="0571">第三套</option>
+            <option value="0571">第四套</option>
+        </select>
+        </div>
+        <button type="button" class="layui-btn layui-btn-normal">开始练习</button>
+    </div>
+</div>
 
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>祝强</td>
-        <td>90.1%</td>
-        <td>1:20:23</td>
-        <td>92</td>
-        <td>1</td>
-    </tr>
-    <tr>
-        <td>许闲心</td>
-        <td>89.1%</td>
-        <td>1:30:23</td>
-        <td>87</td>
-        <td>2</td>
-    </tr>
-    <tr>
-        <td>刘能</td>
-        <td>88.1%</td>
-        <td>1:30:23</td>
-        <td>86</td>
-        <td>3</td>
-    </tr>
-    </tbody>
-</table>
 <div>
     <div id="page_container"></div>
 </div>
