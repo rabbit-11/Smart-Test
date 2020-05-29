@@ -129,6 +129,8 @@
                             $.cookie("rememberMe",logindata.rememberMe,{ expires: 7, path: '/' });
                             $.cookie("role",data.data.role,{ expires: 7, path: '/' });
                             $.cookie("username",data.data.name,{ expires: 7, path: '/' });
+                            $.cookie("id",data.data.id,{ expires: 7, path: '/' });
+                            $.cookie("avatar",data.data.avatar,{ expires: 7, path: '/' });
                         }
                         else{
                             $.cookie("mobile",logindata.mobile,{ expires: 0.5, path: '/' });
@@ -136,6 +138,8 @@
                             $.cookie("rememberMe","false",{ expires: 0.5, path: '/' });
                             $.cookie("role",data.data.role,{ expires: 0.5, path: '/' });
                             $.cookie("username",data.data.name,{ expires: 0.5, path: '/' });
+                            $.cookie("id",data.data.id,{ expires: 0.5, path: '/' });
+                            $.cookie("avatar",data.data.avatar,{ expires: 0.5, path: '/' });
                         }
                         layer.msg('登录成功', function () {
                             window.location = 'page/index.html';

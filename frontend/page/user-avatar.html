@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>zyupload上传实例</title>
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../lib/jq-module/zyupload/zyupload-1.0.0.min.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+<body>
+    <input type="file" id='check' multiple>
+    <div style="margin-top: 10px;"><img id="echo"> </div>
+    <canvas id="canvas" style="display: none;"></canvas>
+    
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../lib/jq-module/zyupload/zyupload-1.0.0.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+$(function(){
+    $("#check").on('change',function() {
+        handleFile($("#check")[0].files);
+    });
+    function handleFile(files) {
+        console.log(files)
+        if (files[0]) {
+            var img='';
+            for(var i=0;i<files.length;i++){
+                img = window.URL.createObjectURL(files[i]); // 将文件生成url
+            }
+            show(img);
+        }
+    }
+    function show(imgurl) {
+        // var html = '<img src="' + img + '" alt="" style="width:200px;height:200px">';
+        // $("#imgCon").html(html);
+        var can = document.getElementById('canvas');
+        var ctx = can.getContext('2d');
+        var img = new Image();
+        img.onload = function(){
+            can.width  = 100;
+            can.height = 100;
+            ctx.drawImage(img, 0, 0, 100, 100);
+            var url = can.toDataURL();
+            $("#echo").attr("src",url);
+            $("#touxiang",parent.document).html(url);
+        }
+        //本地的图片
+        img.src = imgurl;
+    }
+});
+
+</script>
+</body>
+</html>
