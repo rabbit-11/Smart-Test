@@ -59,7 +59,7 @@
                 </div>
             </div>
         </div>
-        <div id="touxiang" ></div>
+        <div id="touxiang" style="display: none;"></div>
     </div>
 </div>
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
@@ -72,10 +72,22 @@
         $("#mobile").html($.cookie("mobile"));
         $("#role").html($.cookie("role")=="0"?"学生":"教师");
         $("#sex").html($.cookie("sex")=="0"?"女":"男");
-        console.log($.cookie("avatar"))
-        $("#avatar").attr("src",$.cookie("avatar"));
+        
+        var loginparam={};
+        loginparam.mobile=$.cookie("mobile");
+        loginparam.password=$.cookie("password");
+        console.log(loginparam)
+        $.ajax({
+            type:"POST",
+            url:"http://localhost:8069/user/login",
+            data:JSON.stringify(loginparam),
+            dataType:"json",
+            contentType:"application/json",
+            success:function(data){
+                if(data.data.avatar!="") $("#avatar").attr("src",data.data.avatar);
+            }
+        });
         $('#user-avatar').on('click', function () {
-            
             var index = layer.open({
                 title: '选择头像',
                 type: 2,
@@ -83,12 +95,13 @@
                 shadeClose: true,
                 area: ['300px', '300px'],
                 content: 'user-avatar.html',
-                btn: ['确认'], //只是为了演示
+                btn: ['确认'],
                 yes: function () {
                     var param={};
                     param.id=$.cookie("id");
                     param.name=$.cookie("username");
                     param.avatar=$("#touxiang").html();
+                    console.log(param)
                     $.ajax({
                         type:"POST",
                         url:"http://localhost:8069/user/edit",
@@ -97,7 +110,8 @@
                         contentType:"application/json",
                         success:function(data){
                             if(data.status==200){
-                                $.cookie("avatar",param.avatar,{ expires: 0.5, path: '/' });
+                                $("#avatar").attr("src",$("#touxiang").html());
+                                $("#headeravatar",parent.document).attr("src",$("#touxiang").html());
                                 var index = layer.alert("修改头像成功", {
                                     title: '成功'
                                 }, function () {

@@ -28,164 +28,140 @@
 <body>
     <div class="layuimini-container">
         <div class="layuimini-main">
-            <script type="text/html" id="toolbarDemo">
+            <!-- <script type="text/html" id="toolbarDemo">
                 <div class="layui-btn-container">
                     <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
                     <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
                 </div>
-            </script>
+            </script> -->
     
             <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
     
             <script type="text/html" id="currentTableBar">
-                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
-                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+                <a class="layui-btn layui-btn-sm data-count-detail" lay-event="detail"><i class="layui-icon layui-icon-form"></i>详情</a>
+                <a class="layui-btn layui-btn-sm layui-btn-danger data-count-delete" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
             </script>
-            <table class="layui-table">
-                <colgroup>
-                    <col width="150">
-                    <col width="200">
-                    <col>
-                </colgroup>
-                <thead>
-                <tr>
-                    <th>发送人</th>
-                    <th>消息标题</th>
-                    <th>发送时间</th>
-                    <th>内容</th>
-                    <th>操作</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>祝强</td>
-                    <td>支付宝到账了吗</td>
-                    <td>1:20:23</td>
-                    <td>支付宝到账0.1元</td>
-                    <td>
-                        <button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i>详情</button>
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal"><i class="layui-icon"></i> 删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>许闲心</td>
-                    <td>今天学习了吗</td>
-                    <td>1:30:23</td>
-                    <td>没有</td>
-                    <td>
-                        <button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i>详情</button>
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal"><i class="layui-icon"></i> 删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>刘能</td>
-                    <td>能不能早点写完</td>
-                    <td>1:30:23</td>
-                    <td>不行</td>
-                    <td>
-                        <button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i>详情</button>
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal"><i class="layui-icon"></i> 删除</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div>
-                <div id="page_container"></div>
-            </div>
         </div>
     </div>
 
 
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js" charset="utf-8"></script>
 <script>
-    layui.use(['form', 'table'], function () {
+    layui.use(['form', 'table','jquery','cookie'], function () {
         var $ = layui.jquery,
             form = layui.form,
-            table = layui.table;
-
-        table.render({
-            elem: '#currentTableId',
-            url: '../api/table.json',
-            toolbar: '#toolbarDemo',
-            defaultToolbar: ['filter', 'exports', 'print', {
-                title: '提示',
-                layEvent: 'LAYTABLE_TIPS',
-                icon: 'layui-icon-tips'
-            }],
-            cols: [[
-                {type: "checkbox", width: 50},
-                {field: 'id', width: 80, title: 'ID', sort: true},
-                {field: 'username', width: 80, title: '用户名'},
-                {field: 'sex', width: 80, title: '性别', sort: true},
-                {field: 'city', width: 80, title: '城市'},
-                {field: 'sign', title: '签名', minWidth: 150},
-                {field: 'experience', width: 80, title: '积分', sort: true},
-                {field: 'score', width: 80, title: '评分', sort: true},
-                {field: 'classify', width: 80, title: '职业'},
-                {field: 'wealth', width: 135, title: '财富', sort: true},
-                {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
-            ]],
-            limits: [10, 15, 20, 25, 50, 100],
-            limit: 15,
-            page: true,
-            skin: 'line'
-        });
-
-        /**
-         * toolbar监听事件
-         */
-        table.on('toolbar(currentTableFilter)', function (obj) {
-            if (obj.event === 'add') {  // 监听添加操作
-                var index = layer.open({
-                    title: '添加用户',
-                    type: 2,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: ['100%', '100%'],
-                    content: '../page/table/add.html',
+            table = layui.table,
+            cookie = layui.cookie;
+        // var tableurl=;
+        // console.log(tableurl)
+        $.ajax({
+            type:"GET",
+            url:"http://localhost:8069/message/getList?id="+$.cookie("id"),
+            // data:JSON.stringify(loginparam),
+            dataType:"json",
+            contentType:"application/json",
+            success:function(data){
+                table.render({
+                    elem: '#currentTableId',
+                    data: data.data,
+                    cols: [[
+                        {field: 'senderName', width: '10%', title: '发送人', sort: true, align: "center"},
+                        {field: 'createAt', width: '20%', title: '发送时间', sort: true, align: "center",
+                            templet:function(data){
+                                var time=new Date(data.createAt);
+                                return time.getFullYear()+"-"+townumber(time.getMonth())+"-"+townumber(time.getDay())+" "+townumber(time.getHours())+":"+townumber(time.getMinutes())+":"+townumber(time.getSeconds());
+                            }
+                        },
+                        {field: 'content', width: '50%', title: '消息内容', sort: true, align: "center"},
+                        {title: '操作', width: '20%', toolbar: '#currentTableBar', align: "center"}
+                    ]],
+                    limits: [10, 20, 50],
+                    limit: 10,
+                    page: true
+                    // skin: 'line'
                 });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
-            } else if (obj.event === 'delete') {  // 监听删除操作
-                var checkStatus = table.checkStatus('currentTableId')
-                    , data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
             }
         });
-
-        //监听表格复选框选择
-        table.on('checkbox(currentTableFilter)', function (obj) {
-            console.log(obj)
-        });
-
+        
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'edit') {
-
+            if (obj.event === 'detail') {
                 var index = layer.open({
-                    title: '编辑用户',
-                    type: 2,
+                    title: '查看消息详情',
+                    type: 1,
                     shade: 0.2,
-                    maxmin:true,
                     shadeClose: true,
-                    area: ['100%', '100%'],
-                    content: '../page/table/edit.html',
+                    area: '300px;',
+                    btn: ['关闭', '删除'],
+                    btnAlign: 'c',
+                    content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;"><div>from:'+data.senderName+'</div><div><p style="text-indent:25px">'+data.content+'</p></div><div style="float:right">to:'+$.cookie("username")+'</div></div>',
+                    yes: function () {
+                        layer.closeAll();
+                    },
+                    btn2: function () {
+                        layer.confirm('是否确认删除此消息', function (index) {
+                            $.ajax({
+                                type:"GET",
+                                url:"http://localhost:8069/message/delete?id="+data.id,
+                                // data:JSON.stringify(loginparam),
+                                dataType:"json",
+                                contentType:"application/json",
+                                success:function(data){
+                                    layer.msg('删除成功', {
+                                        time: 1000,
+                                    });
+                                    setTimeout(function(){
+                                        layer.closeAll();
+                                        obj.del();
+                                    },1000)
+                                },
+                                error:function(data){
+                                    layer.msg('删除失败', {
+                                        time: 1000
+                                    });
+                                }
+                            });
+                        });
+                    }
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
                 return false;
             } else if (obj.event === 'delete') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
+                layer.confirm('是否确认删除此消息', function (index) {
+                    $.ajax({
+                        type:"GET",
+                        url:"http://localhost:8069/message/delete?id="+data.id,
+                        // data:JSON.stringify(loginparam),
+                        dataType:"json",
+                        contentType:"application/json",
+                        success:function(data){
+                            layer.msg('删除成功', {
+                                time: 1000,
+                            });
+                            setTimeout(function(){
+                                layer.closeAll();
+                                obj.del();
+                            },1000)
+                        },
+                        error:function(data){
+                            layer.msg('删除失败', {
+                                time: 1000
+                            });
+                        }
+                    });
                 });
             }
         });
 
+        function townumber(num){
+            if(String(num).length==1){
+                return "0"+num;
+            }
+            else return num;
+        }
     });
 </script>
 </body>

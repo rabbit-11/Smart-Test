@@ -60,7 +60,7 @@
                     <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
                 </li>
                 <li class="layui-nav-item layuimini-setting" style="margin-right:30px">
-                    <a href="javascript:;"><span id="name"></span></a>
+                    <a href="javascript:;"><span><img id="headeravatar" src="../images/touxiang.jpg" style="width:40px;height:40px;border-radius:20px;">&emsp;</span><span id="name"></span></a>
                     <dl class="layui-nav-child">
                         <dd>
                             <a href="javascript:;" layuimini-content-href="user-setting.html" data-title="基本资料" data-icon="fa fa-gears">基本资料</a>
@@ -134,7 +134,7 @@
             miniTongji = layui.miniTongji,
             cookie = layui.cookie;
         var url=$.cookie("role")=="0"?"../api/initstudent.json":"../api/initteacher.json";
-
+        
         var options = {
             iniUrl: url,    // 初始化接口
             clearUrl: "../api/clear.json", // 缓存清理接口
@@ -148,6 +148,20 @@
         };
         miniAdmin.render(options);
 
+        var loginparam={};
+        loginparam.mobile=$.cookie("mobile");
+        loginparam.password=$.cookie("password");
+        $.ajax({
+            type:"POST",
+            url:"http://localhost:8069/user/login",
+            data:JSON.stringify(loginparam),
+            dataType:"json",
+            contentType:"application/json",
+            success:function(data){
+                if(data.data.avatar!="") $("#headeravatar").attr("src",data.data.avatar);
+            }
+        });
+
         // 百度统计代码，只统计指定域名
         miniTongji.render({
             specific: true,
@@ -157,7 +171,7 @@
                 'layuimini-onepage.99php.cn',
             ],
         });
-        if($.cookie("username")==undefined){
+        if($.cookie("username")==undefined||$.cookie("password")==undefined){
             window.location = '../index.html';
         }
         $("#name").html($.cookie("username"));
