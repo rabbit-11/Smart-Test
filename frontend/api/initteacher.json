@@ -1,7 +1,7 @@
 {
   "homeInfo": {
     "title": "首页",
-    "href": "welcome-1.html?t=1"
+    "href": "library-manage.html"
   },
   "logoInfo": {
     "title": "Smart Test",
@@ -23,13 +23,13 @@
           "child": [
             {
               "title": "题库管理",
-              "href": "welcome-1.html",
+              "href": "library-manage.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "试卷管理",
-              "href": "welcome-2.html",
+              "href": "paper-manage.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }

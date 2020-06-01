@@ -43,7 +43,7 @@
                 <img src="../images/timg.jpg" style="width:150px;height:150px">
                 <p>程序设计基础</p>
                 <p>5/11 13:20-14:20</p>
-                <a class="layui-btn" href="test.html" target="_blank">进入考试</a>
+                <a href="javascript:;" class="layui-btn" layuimini-content-href="test.html" data-title="考试">进入考试</a>
             </div>
             <div style="float:left;margin-left:20px">
                 <img src="../images/timg.jpg" style="width:150px;height:150px">
@@ -76,88 +76,28 @@
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
-    layui.use(['form', 'table','jquery','cookie'], function () {
+    layui.use(['form', 'table','jquery','cookie','miniAdmin'], function () {
         var $ = layui.jquery,
             form = layui.form,
-            table = layui.table,
+            miniAdmin = layui.miniAdmin,
             cookie = layui.cookie;
         // var tableurl=;
         // console.log(tableurl)
-        var param={};
-        param.creator=$.cookie("id");
-
+        var url=$.cookie("role")=="0"?"../api/initstudent.json":"../api/initteacher.json";
         
-
-        $.ajax({
-            type:"POST",
-            url:"http://localhost:8069/library/getAll",
-            data:JSON.stringify(param),
-            dataType:"json",
-            contentType:"application/json",
-            success:function(data){
-                var select=$("#library").html();
-                for(var i=0;i<data.data.length;i++){
-                    select+='<option value="'+data.data[i].id+'">'+data.data[i].name+'</option>';
-                }
-                $("#library").html(select);
-                form.render();
-            }
-        });
-
-        form.on('submit(data-search-btn)', function (data) {
-            $.ajax({
-                type:"GET",
-                url:"http://localhost:8069/library/getAllQuestion?id="+data.field.library,
-                // data:JSON.stringify(loginparam),
-                dataType:"json",
-                contentType:"application/json",
-                success:function(data){
-                    table.render({
-                        elem: '#currentTableId',
-                        data: data.data,
-                        toolbar: '#toolbarDemo',
-                        defaultToolbar: [],
-                        cols: [[
-                            {field: 'content', width: "20%", title: '题目内容', sort: true, align: "center"},
-                            {field: 'type', width: "20%", title: '题目类别', align: "center",
-                                templet:function(data){
-                                    switch(data.type){
-                                        case 1:return "选择题"; break;
-                                        case 2:return "填空题"; break;
-                                        case 3:return "多选题"; break;
-                                        case 4:return "简答题"; break;
-                                    }
-                                }
-                            },
-                            {field: 'answer', width: "20%", title: '标准答案', sort: true, align: "center"},
-                            {field: 'createAt', width: "20%", title: '发送时间', sort: true, align: "center",
-                                    templet:function(data){
-                                        var time=new Date(data.createAt);
-                                        return time.getFullYear()+"-"+townumber(time.getMonth())+"-"+townumber(time.getDay())+" "+townumber(time.getHours())+":"+townumber(time.getMinutes())+":"+townumber(time.getSeconds());
-                                    }
-                                },
-                            {title: '操作', width: "20%", toolbar: '#currentTableBar', align: "center"}
-                        ]],
-                        limits: [10, 15, 20, 25, 50, 100],
-                        limit: 15,
-                        page: true,
-                        // skin: 'line'
-                    });
-                }
-            });
-            
-            return false;
-        });
-        function townumber(num){
-            if(String(num).length==1){
-                return "0"+num;
-            }
-            else return num;
-        }
+        var options = {
+            iniUrl: url,    // 初始化接口
+            clearUrl: "../api/clear.json", // 缓存清理接口
+            urlHashLocation: true,      // 是否打开hash定位
+            bgColorDefault: false,      // 主题默认配置
+            multiModule: true,          // 是否开启多模块
+            menuChildOpen: false,       // 是否默认展开菜单
+            loadingTime: 0,             // 初始化加载时间
+            pageAnim: true,             // iframe窗口动画
+            maxTabNum: 20,              // 最大的tab打开数量
+        };
+        miniAdmin.render(options);
     });
-$("#testBegin").click(function(){
-    herf='test.html'
-});
 </script>
 </body>
 </html>
