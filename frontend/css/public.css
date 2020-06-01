@@ -3,6 +3,10 @@ body {
     background: #f2f2f2;
 }
 
+.hidden{
+    display: none;
+}
+
 .layuimini-container {
     border: 1px solid #f2f2f2;
     border-radius: 5px;

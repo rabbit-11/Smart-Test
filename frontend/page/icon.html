@@ -26,52 +26,143 @@
     </style>
 </head>
 <body>
-<table class="layui-table">
-    <colgroup>
-        <col width="150">
-        <col width="200">
-        <col>
-    </colgroup>
-    <thead>
-    <tr>
-        <th>姓名</th>
-        <th>正确率</th>
-        <th>花费时间</th>
-        <th>最终分数</th>
-        <th>排名</th>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <fieldset class="table-search-fieldset">
+                <legend>搜索信息</legend>
+                <div style="margin: 10px 10px 10px 10px">
+                    <form class="layui-form layui-form-pane" action="">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">选择班级</label>
+                                <div class="layui-input-block">
+                                    <select id="class" name="class" lay-filter="class">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
 
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>祝强</td>
-        <td>90.1%</td>
-        <td>1:20:23</td>
-        <td>92</td>
-        <td>1</td>
-    </tr>
-    <tr>
-        <td>许闲心</td>
-        <td>89.1%</td>
-        <td>1:30:23</td>
-        <td>87</td>
-        <td>2</td>
-    </tr>
-    <tr>
-        <td>刘能</td>
-        <td>88.1%</td>
-        <td>1:30:23</td>
-        <td>86</td>
-        <td>3</td>
-    </tr>
-    </tbody>
-</table>
-<div>
-    <div id="page_container"></div>
-</div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">选择考试</label>
+                                <div class="layui-input-block">
+                                    <select id="exam" name="exam" lay-filter="exam">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
 
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+    
+            <script type="text/html" id="currentTableBar">
+                <a class="layui-btn layui-btn-sm data-count-detail" lay-event="detail"><i class="layui-icon layui-icon-form"></i>详情</a>
+                <a class="layui-btn layui-btn-sm layui-btn-danger data-count-delete" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+            <table class="layui-table hidden">
+                <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>正确率</th>
+                    <th>花费时间</th>
+                    <th>最终分数</th>
+                    <th>排名</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>祝强</td>
+                    <td>90.1%</td>
+                    <td>1:20:23</td>
+                    <td>92</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>许闲心</td>
+                    <td>89.1%</td>
+                    <td>1:30:23</td>
+                    <td>87</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>刘能</td>
+                    <td>88.1%</td>
+                    <td>1:30:23</td>
+                    <td>86</td>
+                    <td>3</td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <div id="page_container"></div>
+            </div>
+        </div>
+    </div>
 
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table','jquery','cookie'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            cookie = layui.cookie;
+        // var tableurl=;
+        // console.log(tableurl)
 
+        $.ajax({
+            type:"GET",
+            url:"http://localhost:8069/user/getClass?id="+$.cookie("id"),
+            // data:JSON.stringify(loginparam),
+            dataType:"json",
+            contentType:"application/json",
+            success:function(data){
+                var select=$("#class").html();
+                for(var i=0;i<data.data.length;i++){
+                    select+='<option value="'+data.data[i].id+'">'+data.data[i].className+'</option>';
+                }
+                $("#class").html(select);
+                form.render();
+            }
+        });
+
+        form.on('submit(data-search-btn)', function (data) {
+            $(".layui-table").removeClass("hidden")
+            return false;
+        });
+        form.on('select(class)', function (data) {
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8069/exam/getByClass?classId="+data.value,
+                // data:JSON.stringify(loginparam),
+                dataType:"json",
+                contentType:"application/json",
+                success:function(data){
+                    console.log(data)
+                    var select='<option value=""></option>';
+                    for(var i=0;i<data.data.length;i++){
+                        select+='<option value="'+data.data[i].id+'">'+data.data[i].paperName+'</option>';
+                    }
+                    $("#exam").html(select);
+                    form.render();
+                }
+            });
+        });
+        
+
+    });
+</script>
 </body>
 </html>
