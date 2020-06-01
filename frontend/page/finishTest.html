@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>进入考试</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        h4{ font-size:18px;font-family:"Microsoft YaHei","Simsun",Arial; font-weight:normal; line-height:1; padding:0; margin:0;}
+        .icons li{  margin:5px 0; text-align:center; height:120px; cursor:pointer;}
+        .icons li i{ display:block; font-size:35px; margin:10px 0; line-height:60px; height:60px;}
+        .icons li:hover{ background:#2f4056; border-radius:5px; color:#fff;}
+        .icons li:hover i{ font-size:50px;}
+        .section{ padding:20px;}
+        .section h4 span{ color:#0084e9;}
+        .fa {font-size: 25px !important;}
+        .fa:hover {font-size: 50px !important;}
+    </style>
+</head>
+<body>
+<div class="layui-card">
+    <div class="layui-card-header">历史试卷</div>
+    <div class="layui-card-body" >
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+
+                <div  class="layui-input-block">
+                    <h4 style="margin:10px">一、单选题</h4>
+                    <p>1、C语言的基本构成单位是：</p>
+                    <input name="sex" title="A.函数" type="radio" checked=" " value="A"><br>
+                    <input name="sex" title="B.函数和过程" type="radio" disabled="" value="B.函数和过程"><br>
+                    <input name="sex" title="C.超文本过程"  type="radio" disabled="" value="C"><br>
+                    <input name="sex" title="D.子程序"  type="radio" disabled="" value="D">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-form-item" pane="">
+                    <div class="layui-input-block">
+                        <h4 style="margin:10px">二、多选题</h4>
+                        <p>1、下列字符串是标识符的有：</p>
+                        <input name="like1[write]" title="A、_hj" checked="" type="checkbox" lay-skin="primary"><br>
+                        <input name="like1[read]" title="B、long" disabled="" type="checkbox" lay-skin="primary"><br>
+                        <input name="like1[game]" title="C、anne227" checked=""  type="checkbox" lay-skin="primary"><br>
+                        <input name="like1[game]" title="D、9student" disabled="" type="checkbox" lay-skin="primary">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <h4 style="margin:10px">三、填空题</h4>
+                        <p>1、一个函数由两部分组成，它们分别是：</p>
+                        <input name="title1" class="layui-input" type="text" disabled="" placeholder="第一空" autocomplete="off" lay-verify="title" value="函数">
+                        <input name="title2" class="layui-input" type="text" disabled="" placeholder="第二空" autocomplete="off" lay-verify="title" value="子程序">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <div class="layui-input-block">
+                        <h4 style="margin:10px">四、简答题</h4>
+                        <p>1、C语言的基本构成单位是：</p>
+                        <textarea class="layui-textarea" placeholder="请输入答案" disabled="">函数和子程序</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <div id="page_container"></div>
+    </div>
+    <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script>
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+
+  //日期
+  laydate.render({
+    elem: '#date'
+  });
+  laydate.render({
+    elem: '#date1'
+  });
+
+  //创建一个编辑器
+  var editIndex = layedit.build('LAY_demo_editor');
+
+  //自定义验证规则
+  form.verify({
+    title: function(value){
+      if(value.length < 5){
+        return '标题至少得5个字符啊';
+      }
+    }
+    ,pass: [
+      /^[\S]{6,12}$/
+      ,'密码必须6到12位，且不能出现空格'
+    ]
+    ,content: function(value){
+      layedit.sync(editIndex);
+    }
+  });
+
+  //监听指定开关
+  form.on('switch(switchTest)', function(data){
+    layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+      offset: '6px'
+    });
+    layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+  });
+
+  //监听提交
+  form.on('submit(demo1)', function(data){
+    layer.alert(JSON.stringify(data.field), {
+      title: '最终的提交信息'
+    })
+    return false;
+  });
+
+
+
+});
+</script>
+</body>
+</html>

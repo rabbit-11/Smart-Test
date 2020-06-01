@@ -45,7 +45,7 @@
         <td>2020-01-30</td>
         <td>88</td>
         <td>
-            <button type="button" class="layui-btn layui-btn-normal">查看</button>
+            <a href="javascript:;" class="layui-btn layui-btn-normal" layuimini-content-href="wrong_count.html" data-title="错题记录">点击查看</a>
             <button type="button" class="layui-btn layui-btn-danger">删除</button>
         </td>
     </tr>
@@ -54,7 +54,7 @@
         <td>2020-01-30</td>
         <td>88</td>
         <td>
-            <button type="button" class="layui-btn layui-btn-normal">查看</button>
+            <a href="javascript:;" class="layui-btn layui-btn-normal" layuimini-content-href="wrong_count.html" data-title="错题记录">点击查看</a>
             <button type="button" class="layui-btn layui-btn-danger">删除</button>
         </td>
     </tr>
@@ -63,7 +63,7 @@
         <td>2020-01-30</td>
         <td>88</td>
         <td>
-            <button type="button" class="layui-btn layui-btn-normal">查看</button>
+            <a href="javascript:;" class="layui-btn layui-btn-normal" layuimini-content-href="wrong_count.html" data-title="错题记录">点击查看</a>
             <button type="button" class="layui-btn layui-btn-danger">删除</button>
         </td>
     </tr>
@@ -72,7 +72,7 @@
     <td>2020-01-30</td>
     <td>88</td>
     <td>
-        <button type="button" class="layui-btn layui-btn-normal">查看</button>
+        <a href="javascript:;" class="layui-btn layui-btn-normal" layuimini-content-href="wrong_count.html" data-title="错题记录">点击查看</a>
         <button type="button" class="layui-btn layui-btn-danger">删除</button>
     </td>
     </tr>
@@ -81,5 +81,30 @@
     <div id="page_container"></div>
 </div>
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table','jquery','cookie','miniAdmin'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            miniAdmin = layui.miniAdmin,
+            cookie = layui.cookie;
+        // var tableurl=;
+        // console.log(tableurl)
+        var url=$.cookie("role")=="0"?"../api/initstudent.json":"../api/initteacher.json";
+
+        var options = {
+            iniUrl: url,    // 初始化接口
+            clearUrl: "../api/clear.json", // 缓存清理接口
+            urlHashLocation: true,      // 是否打开hash定位
+            bgColorDefault: false,      // 主题默认配置
+            multiModule: true,          // 是否开启多模块
+            menuChildOpen: false,       // 是否默认展开菜单
+            loadingTime: 0,             // 初始化加载时间
+            pageAnim: true,             // iframe窗口动画
+            maxTabNum: 20,              // 最大的tab打开数量
+        };
+        miniAdmin.render(options);
+    });
+</script>
 </body>
 </html>
