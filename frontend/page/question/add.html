@@ -6,8 +6,8 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
-    <link rel="stylesheet" href="../css/public.css" media="all">
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
     <style>
         .layui-form-item .layui-input-company {width: auto;padding-right: 10px;line-height: 38px;}
     </style>
@@ -20,18 +20,38 @@
             <div class="layui-form-item">
                 <label class="layui-form-label required">题目类型</label>
                 <div class="layui-input-block">
-                    <select id="library" name="library" lay-filter="library">
+                    <select id="type" name="type" lay-filter="type" lay-verify="required" lay-reqtext="题目类型不能为空">
                         <option value=""></option>
+                        <option value="1">单选题</option>
+                        <option value="2">填空题</option>
+                        <option value="3">多选题</option>
+                        <option value="4">简答题</option>
                     </select>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label required">新的手机号码</label>
+                <label class="layui-form-label required">题目内容</label>
                 <div class="layui-input-block">
-                    <input name="mobile" lay-verify="required" lay-reqtext="手机号码不能为空" placeholder="请输入新的手机号码"  value="" class="layui-input">
+                    <textarea name="content" lay-verify="required" lay-reqtext="题目内容不能为空" placeholder="请输入题目内容"  value="" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">标准答案</label>
+                <div class="layui-input-block">
+                    <textarea name="answer" lay-verify="required" lay-reqtext="标准答案不能为空" placeholder="请输入标准答案（选择题答案为大写字母，如A，多选题AB）"  value="" class="layui-textarea"></textarea>
                 </div>
             </div>
 
+            <div id="selects" style="margin-left: 40px;">
+            
+            </div>
+            <div class="layui-form-item selectbutton hidden">
+                <div class="layui-input-block">
+                    <button id="add" class="layui-btn layui-btn-primary hidden"><i class="layui-icon layui-icon-addition"></i></button>
+                    <button id="delete" class="layui-btn layui-btn-primary hidden"><i class="layui-icon layui-icon-subtraction"></i></button>
+                </div>
+            </div>
+            
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
@@ -40,8 +60,8 @@
         </div>
     </div>
 </div>
-<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
-<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
     layui.use(['form','miniTab','cookie','jquery','layer'], function () {
         var $ = layui.jquery,
@@ -50,42 +70,87 @@
             miniTab = layui.miniTab,
             cookie = layui.cookie;
 
+        var count=0;
+
         //监听提交
-        form.on('submit(saveBtn)', function (data) {
-            var param=data.field;
-            param.id=$.cookie("id");
-            param.name=$.cookie("username");
-            if(param.password!=$.cookie("password")){
-                var index = layer.alert("密码错误", {
-                    title: '错误'
-                }, function () {
-                    layer.close(index);
-                });
-                return false;
+        form.on('select(type)', function(data){
+            if(data.value==1||data.value==3){
+                $("#selects").removeClass("hidden");
+                count=1;
+                var htmltext='<div class="layui-form-item select-item"><label class="layui-form-label">选项A</label><div class="layui-input-block"><input name="select1" placeholder="请输入选项内容"  value="" class="layui-input"></div></div>'
+                $("#selects").html(htmltext);
+                $(".selectbutton").removeClass("hidden");
+                $("#add").removeClass("hidden");
+                form.render();
             }
+            else{
+                $("#selects").addClass("hidden");
+                $("#add").addClass("hidden");
+                $("#delete").addClass("hidden");
+                $(".selectbutton").addClass("hidden");
+                form.render();
+            }
+        })
+        form.on('submit(saveBtn)', function (data) {
+            console.log(data.field);
+            var content=data.field.content;
+            var param={};
+            for(var item in data.field){
+                if(item.slice(0,6)=="select"){
+                    content+="|"+data.field[item];
+                }
+            }
+            param.type=data.field.type;
+            param.content=content;
+            param.answer=data.field.answer;
+            param.creator=$.cookie("id");
             $.ajax({
                 type:"POST",
-                url:"http://localhost:8069/user/edit",
+                url:"http://localhost:8069/question/add",
                 data:JSON.stringify(param),
                 dataType:"json",
                 contentType:"application/json",
                 success:function(data){
-                    if(data.status==200){
-                        $.cookie("mobile",param.mobile,{ expires: 0.5, path: '/' });
-                        var index = layer.alert("修改手机号码成功", {
-                            title: '成功'
-                        }, function () {
-                            layer.close(index);
-                            var iframeIndex = parent.layer.getFrameIndex(window.name);
-                            parent.layer.close(iframeIndex);
-                        });
-                    }
+                    var addparam={};
+                    addparam.libraryId=parent.libraryid;
+                    addparam.questionId=data.data;
+                    $.ajax({
+                        type:"POST",
+                        url:"http://localhost:8069/library/addQuestion",
+                        data:JSON.stringify(addparam),
+                        dataType:"json",
+                        contentType:"application/json",
+                        success:function(data){
+                            var index = layer.alert("添加问题成功", {
+                                title: '成功'
+                            }, function () {
+                                layer.close(index);
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+                                $("[type='submit']",parent.document).click();
+                            });
+                        }
+                    });
                 }
             });
-            
             return false;
         });
-
+        function addselect(){
+            count+=1;
+            var htmltext='<div class="layui-form-item select-item"><label class="layui-form-label">选项'+String.fromCharCode((64+count))+'</label><div class="layui-input-block"><input name="select'+count+'" placeholder="请输入选项内容"  value="" class="layui-input"></div></div>';
+            $("#selects").append(htmltext);
+            $("#delete").removeClass("hidden");
+            form.render();
+        }
+        function deleteselect(){
+            count-=1;
+            var item=$(".select-item");
+            if(item.length==2) $("#delete").addClass("hidden");
+            $(item[item.length-1]).remove();
+            form.render();
+        }
+        $("#add").on('click',addselect);
+        $("#delete").on('click',deleteselect);
     });
 </script>
 </body>
