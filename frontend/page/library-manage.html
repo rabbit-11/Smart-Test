@@ -45,18 +45,22 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">选择题库</label>
                                 <div class="layui-input-block">
-                                    <select id="library" name="library" lay-filter="library">
+                                    <select id="library" name="library" lay-filter="library" lay-verify="required" lay-reqtext="请先选择题库">
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
-                            
                             <div class="layui-inline">
                                 <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜索题目</button>
                             </div>
-
                             <div class="layui-inline">
-                                <button class="layui-btn layui-btn-primary" lay-filter="data-add-btn"><i class="layui-icon layui-icon-addition"></i> 新建题库</button>
+                                <button id="addlibrary" class="layui-btn layui-btn-primary"><i class="layui-icon layui-icon-addition"></i> 新建题库</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-edit-btn"><i class="layui-icon layui-icon-edit"></i> 编辑题库</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-delete-btn"><i class="layui-icon layui-icon-delete"></i> 删除题库</button>
                             </div>
                         </div>
                     </form>
@@ -79,17 +83,23 @@
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
+    var libraryid=0;
+    var questionid=0;
+    var questioncontent="";
+    var questiontype="";
+    var questionanswer="";
+    var table="";
+    var form="";
     layui.use(['form', 'table','jquery','cookie'], function () {
         var $ = layui.jquery,
-            form = layui.form,
-            table = layui.table,
             cookie = layui.cookie;
+
+        form = layui.form;
+        table = layui.table;
         // var tableurl=;
         // console.log(tableurl)
         var param={};
         param.creator=$.cookie("id");
-
-        
 
         $.ajax({
             type:"POST",
@@ -106,7 +116,82 @@
                 form.render();
             }
         });
-
+        form.on('select(library)', function (data) {
+            libraryid=Number(data.value);
+        });
+        $("#addlibrary").on('click', function (data) {
+            libraryid=0;
+            var index = layer.open({
+                title: '添加题库',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['100%', '100%'],
+                content: 'question/addlibrary.html',
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+            return false;
+        });
+        form.on('submit(data-edit-btn)', function (data) {
+            libraryid=data.field.library;
+            var index = layer.open({
+                title: '修改题库',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['100%', '100%'],
+                content: 'question/addlibrary.html',
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+            return false;
+        });
+        form.on('submit(data-delete-btn)', function (data) {
+            layer.confirm('是否确认删除此消息', function (index) {
+                $.ajax({
+                    type:"GET",
+                    url:"http://localhost:8069/library/delete?id="+libraryid,
+                    // data:JSON.stringify(loginparam),
+                    dataType:"json",
+                    contentType:"application/json",
+                    success:function(data){
+                        layer.msg('删除成功', {
+                            time: 1000,
+                        });
+                        setTimeout(function(){
+                            layer.closeAll();
+                            obj.del();
+                        },1000)
+                        $.ajax({
+                            type:"POST",
+                            url:"http://localhost:8069/library/getAll",
+                            data:JSON.stringify({"creator":$.cookie("id")}),
+                            dataType:"json",
+                            contentType:"application/json",
+                            success:function(data){
+                                var select='<option value=""></option>';
+                                for(var i=0;i<data.data.length;i++){
+                                    select+='<option value="'+data.data[i].id+'">'+data.data[i].name+'</option>';
+                                }
+                                $("#library").html(select);
+                                form.render();
+                            }
+                        });
+                    },
+                    error:function(data){
+                        layer.msg('删除失败', {
+                            time: 1000
+                        });
+                    }
+                });
+            });
+            return false;
+        });
         form.on('submit(data-search-btn)', function (data) {
             $.ajax({
                 type:"GET",
@@ -115,13 +200,18 @@
                 dataType:"json",
                 contentType:"application/json",
                 success:function(data){
+                    console.log(table)
                     table.render({
                         elem: '#currentTableId',
                         data: data.data,
                         toolbar: '#toolbarDemo',
                         defaultToolbar: [],
                         cols: [[
-                            {field: 'content', width: "20%", title: '题目内容', sort: true, align: "center"},
+                            {field: 'content', width: "20%", title: '题目内容', sort: true, align: "center",
+                                templet:function(data){
+                                    return data.content.split("|")[0];
+                                }
+                            },
                             {field: 'type', width: "20%", title: '题目类别', align: "center",
                                 templet:function(data){
                                     switch(data.type){
@@ -151,45 +241,19 @@
             
             return false;
         });
-        table.on('tool(toolbarDemo)', function (obj) {
-            var data = obj.data;
-            if (obj.event === 'add') {
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
                 var index = layer.open({
-                    title: '新建题目',
+                    title: '添加题目',
                     type: 2,
                     shade: 0.2,
+                    maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    btnAlign: 'c',
-                    content: 'table/edit.html',
+                    content: 'question/add.html',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
-                });
-                return false;
-            } else if (obj.event === 'delete') {
-                layer.confirm('是否确认删除此消息', function (index) {
-                    $.ajax({
-                        type:"GET",
-                        url:"http://localhost:8069/message/delete?id="+data.id,
-                        // data:JSON.stringify(loginparam),
-                        dataType:"json",
-                        contentType:"application/json",
-                        success:function(data){
-                            layer.msg('删除成功', {
-                                time: 1000,
-                            });
-                            setTimeout(function(){
-                                layer.closeAll();
-                                obj.del();
-                            },1000)
-                        },
-                        error:function(data){
-                            layer.msg('删除失败', {
-                                time: 1000
-                            });
-                        }
-                    });
                 });
             }
         });
@@ -197,43 +261,17 @@
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
+                questionid=data.id;
+                questionanswer=data.answer;
+                questioncontent=data.content;
+                questiontype=data.type;
                 var index = layer.open({
                     title: '编辑题目',
                     type: 2,
                     shade: 0.2,
                     shadeClose: true,
-                    area: '300px;',
-                    btn: ['关闭', '删除'],
-                    btnAlign: 'c',
-                    content: 'table/edit.html',
-                    yes: function () {
-                        layer.closeAll();
-                    },
-                    btn2: function () {
-                        layer.confirm('是否确认删除此消息', function (index) {
-                            $.ajax({
-                                type:"GET",
-                                url:"http://localhost:8069/message/delete?id="+data.id,
-                                // data:JSON.stringify(loginparam),
-                                dataType:"json",
-                                contentType:"application/json",
-                                success:function(data){
-                                    layer.msg('删除成功', {
-                                        time: 1000,
-                                    });
-                                    setTimeout(function(){
-                                        layer.closeAll();
-                                        obj.del();
-                                    },1000)
-                                },
-                                error:function(data){
-                                    layer.msg('删除失败', {
-                                        time: 1000
-                                    });
-                                }
-                            });
-                        });
-                    }
+                    area: ['100%', '100%'],
+                    content: 'question/edit.html',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -243,7 +281,7 @@
                 layer.confirm('是否确认删除此消息', function (index) {
                     $.ajax({
                         type:"GET",
-                        url:"http://localhost:8069/message/delete?id="+data.id,
+                        url:"http://localhost:8069/question/delete?id="+data.id,
                         // data:JSON.stringify(loginparam),
                         dataType:"json",
                         contentType:"application/json",
