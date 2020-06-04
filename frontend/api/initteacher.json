@@ -43,7 +43,7 @@
           "child": [
             {
               "title": "考试安排",
-              "href": "choose.html",
+              "href": "arrange.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },

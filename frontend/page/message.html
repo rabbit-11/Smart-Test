@@ -70,7 +70,7 @@
                         {field: 'createAt', width: '20%', title: '发送时间', sort: true, align: "center",
                             templet:function(data){
                                 var time=new Date(data.createAt);
-                                return time.getFullYear()+"-"+townumber(time.getMonth())+"-"+townumber(time.getDay())+" "+townumber(time.getHours())+":"+townumber(time.getMinutes())+":"+townumber(time.getSeconds());
+                                return time.getFullYear()+"-"+townumber(time.getMonth()+1)+"-"+townumber(time.getUTCDate())+" "+townumber(time.getHours())+":"+townumber(time.getMinutes())+":"+townumber(time.getSeconds());
                             }
                         },
                         {field: 'content', width: '50%', title: '消息内容', sort: true, align: "center"},

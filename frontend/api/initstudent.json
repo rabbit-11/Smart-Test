@@ -58,20 +58,8 @@
               "href": "history.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
-            },
-            {
-              "title": "自主改卷",
-              "href": "correct.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
             }
           ]
-        },
-        {
-          "title": "考试安排",
-          "href": "arrange.html",
-          "icon": "fa fa-gears",
-          "target": "_self"
         }
       ]
     },

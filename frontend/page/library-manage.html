@@ -200,7 +200,6 @@
                 dataType:"json",
                 contentType:"application/json",
                 success:function(data){
-                    console.log(table)
                     table.render({
                         elem: '#currentTableId',
                         data: data.data,
@@ -223,10 +222,10 @@
                                 }
                             },
                             {field: 'answer', width: "20%", title: '标准答案', sort: true, align: "center"},
-                            {field: 'createAt', width: "20%", title: '发送时间', sort: true, align: "center",
+                            {field: 'createAt', width: "20%", title: '创建时间', sort: true, align: "center",
                                     templet:function(data){
                                         var time=new Date(data.createAt);
-                                        return time.getFullYear()+"-"+townumber(time.getMonth())+"-"+townumber(time.getDay())+" "+townumber(time.getHours())+":"+townumber(time.getMinutes())+":"+townumber(time.getSeconds());
+                                        return time.getFullYear()+"-"+townumber(time.getMonth()+1)+"-"+townumber(time.getUTCDate())+" "+townumber(time.getHours())+":"+townumber(time.getMinutes())+":"+townumber(time.getSeconds());
                                     }
                                 },
                             {title: '操作', width: "20%", toolbar: '#currentTableBar', align: "center"}
@@ -278,7 +277,7 @@
                 });
                 return false;
             } else if (obj.event === 'delete') {
-                layer.confirm('是否确认删除此消息', function (index) {
+                layer.confirm('是否确认删除此题目', function (index) {
                     $.ajax({
                         type:"GET",
                         url:"http://localhost:8069/question/delete?id="+data.id,
