@@ -49,13 +49,7 @@
             },
             {
               "title": "人工改卷",
-              "href": "wrong.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
-            },
-            {
-              "title": "自动改卷",
-              "href": "history.html",
+              "href": "correct.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }

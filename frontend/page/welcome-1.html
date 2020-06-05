@@ -39,15 +39,6 @@
     <div class="layuimini-container">
         <div class="layuimini-main">
             <div id="examlist" class="layui-row layui-col-space20" style="margin:10px 0 20px 20px">
-                <div class="layui-col-md2" style="text-align: center;">
-                    <img src="../images/timg.jpg" style="width:150px;height:150px">
-                    <p>程序设计基础</p>
-                    <p>期末考试</p>
-                    <p>2020/05/11 13:20:00</p>
-                    <p>|</p>
-                    <p>2020/05/11 14:20:00</p>
-                    <a href="javascript:;" class="layui-btn" layuimini-content-href="test.html" data-title="考试">进入考试</a>
-                </div>
             </div>
         </div>
     </div>
@@ -76,7 +67,7 @@
             maxTabNum: 20,              // 最大的tab打开数量
         };
         miniAdmin.render(options);
-
+        
         $.ajax({
             type:"GET",
             url:"http://localhost:8069/user/getClass?id="+$.cookie("id"),
@@ -85,8 +76,7 @@
             contentType:"application/json",
             success:function(data){
                 var classdata=data.data;
-                for(var k=0;k<classdata.length;k++){
-                    var i=k;
+                for(let i=0;i<classdata.length;i++){
                     $.ajax({
                         type:"GET",
                         url:"http://localhost:8069/exam/getByClass?classId="+classdata[i].id,
@@ -94,42 +84,57 @@
                         dataType:"json",
                         contentType:"application/json",
                         success:function(data){
-                            console.log(i)
-                            data=data.data;
+                            examdata=data.data;
                             console.log("classdata",classdata[i])
-                            console.log("examdata",data);
-                            for(var j=0;j<data.length;j++){
+                            console.log("examdata",examdata);
+                            for(var j=0;j<examdata.length;j++){
                                 var examlist=$("#examlist").html();
                                 examlist+=
                                 '<div class="layui-col-md2" style="text-align: center;">'+
                                     '<img src="../images/timg.jpg" style="width:150px;height:150px">'+
                                     '<p>'+classdata[i].className+'</p>'+
-                                    '<p>'+data[j].name+'</p>'+
-                                    '<p>'+data[j].startTime+'</p>'+
-                                    '<p>|</p>'+
-                                    '<p>'+data[j].endTime+'</p>';
+                                    '<p>'+examdata[j].name+'</p>'+
+                                    '<p>'+examdata[j].startTime.split(" ")[0]+'</p>'+
+                                    '<p>'+examdata[j].startTime.split(" ")[1]+'-'+examdata[j].endTime.split(" ")[1]+'</p>';
+                                    
+                                    // '<p>'+data[j].endTime.split(" ")[0]+'</p>'+
+                                    
                                 var now=new Date();
-                                var start=new Date(data[j].startTime);
-                                var end=new Date(data[j].endTime);
+                                var start=new Date(examdata[j].startTime);
+                                var end=new Date(examdata[j].endTime);
+                                
                                 if(now>start&&now<end){
-                                    examlist+='<a href="javascript:;" class="layui-btn" layuimini-content-href="test.html" data-title="考试">进入考试</a></div>';
+                                    examlist+='<a href="javascript:;" exam-id="'+examdata[j].id+'" paper-id="'+examdata[j].paperId+'" class="layui-btn exam" layuimini-content-href="test.html" data-title="考试">进入考试</a></div>';
                                 }
                                 else{
-                                    examlist+='<a href="javascript:;" class="layui-btn layui-btn-disabled" layuimini-content-href="test.html" data-title="考试">未到考试时间</a></div>';
+                                    examlist+='<a href="javascript:;" class="layui-btn layui-btn-disabled" data-title="考试">未到考试时间</a></div>';
                                 }
-                                    
                                 $("#examlist").html(examlist);
-                                
-                                console.log(now,start,end)
+                                $(".exam").on('click',examclick);
+                                $.ajax({
+                                    type:"POST",
+                                    url:"http://localhost:8069/answer/getByUser",
+                                    data:JSON.stringify({"userId":Number($.cookie("id")),"examId":examdata[j].id}),
+                                    dataType:"json",
+                                    contentType:"application/json",
+                                    success:function(data){
+                                        if(data.data.answer.length>0){
+                                            $("[exam-id='"+data.data.answer[0].examId+"']").addClass("layui-btn-disabled");
+                                            $("[exam-id='"+data.data.answer[0].examId+"']").html("已参加该考试");
+                                            $("[exam-id='"+data.data.answer[0].examId+"']").removeAttr("layuimini-content-href");
+                                        }
+                                    }
+                                });
                             }
-                            
                         }
                     });
+                    function examclick(){
+                        $.cookie("examid",Number($(this).attr("exam-id")),{ expires: 7, path: '/' });
+                        $.cookie("paperid",Number($(this).attr("paper-id")),{ expires: 7, path: '/' });
+                    }
                 }
-                
             }
         });
-
     });
 </script>
 </body>

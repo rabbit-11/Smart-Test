@@ -26,7 +26,7 @@
 
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认添加</button>
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认修改</button>
                 </div>
             </div>
         </form>
@@ -45,7 +45,7 @@
         form.on('submit(saveBtn)', function (data) {
             var param={};
             param.questionId=parent.questionid;
-            param.score=data.field.score;
+            param.score=Number(data.field.score);
             param.paperId=parent.parent.paperid;
             $.ajax({
                 type:"POST",
@@ -60,6 +60,7 @@
                         layer.close(index);
                         var iframeIndex = parent.layer.getFrameIndex(window.name);
                         parent.layer.close(iframeIndex);
+                        parent.totalscore=0;
                         $("#show",parent.document).click();
                     });
                 }

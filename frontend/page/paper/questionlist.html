@@ -55,12 +55,13 @@
 <script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
-    questionid=0;
+    var questionid=0;
+    var totalscore=0;
     layui.use(['table','jquery','cookie'], function () {
         var $ = layui.jquery,
             cookie = layui.cookie,
             table = layui.table;
-        var totalscore=0;
+        
         var param={};
         param.creator=$.cookie("id");
 
@@ -176,13 +177,31 @@
                         data:JSON.stringify({"questionId":data.id,"paperId":parent.paperid}),
                         dataType:"json",
                         contentType:"application/json",
-                        success:function(data){
+                        success:function(deletedata){
                             layer.msg('删除成功', {
                                 time: 1000,
                             });
                             setTimeout(function(){
-                                layer.closeAll();
-                                obj.del();
+                                totalscore-=data.score;
+                                var param={};
+                                param.type=parent.papertype;
+                                param.name=parent.papername;
+                                param.score=totalscore;
+                                param.creator=$.cookie("id");
+                                param.id=parent.paperid;
+                                $.ajax({
+                                    type:"POST",
+                                    url:"http://localhost:8069/paper/edit",
+                                    data:JSON.stringify(param),
+                                    dataType:"json",
+                                    contentType:"application/json",
+                                    success:function(data){
+                                        console.log("修改总分成功");
+                                        $("#show",parent.document).click();
+                                        layer.closeAll();
+                                        obj.del();
+                                    }
+                                });
                             },1000)
                         },
                         error:function(data){

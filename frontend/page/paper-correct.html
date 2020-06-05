@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>进入考试</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        h4{ font-size:18px;font-family:"Microsoft YaHei","Simsun",Arial; font-weight:normal; line-height:1; padding:0; margin:0;}
+        .icons li{  margin:5px 0; text-align:center; height:120px; cursor:pointer;}
+        .icons li i{ display:block; font-size:35px; margin:10px 0; line-height:60px; height:60px;}
+        .icons li:hover{ background:#2f4056; border-radius:5px; color:#fff;}
+        .icons li:hover i{ font-size:50px;}
+        .section{ padding:20px;}
+        .section h4 span{ color:#0084e9;}
+        .fa {font-size: 25px !important;}
+        .fa:hover {font-size: 50px !important;}
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <form class="layui-form layui-form-pane" action="" lay-filter="exam">
+            <div id="form" class="layui-form-item">
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" type="submit" lay-filter="demo1" lay-submit="">立即提交</button>
+                        <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <div id="page_container"></div>
+</div>
+<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+layui.use(['jquery','cookie','form','layer','miniTab'], function(){
+    var $ = layui.jquery
+        form = layui.form,
+        cookie = layui.cookie,
+        layer = layui.layer,
+        miniTab = layui.miniTab;
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8069/question/selectByPaper?id="+parent.paperid,
+        // data:JSON.stringify(loginparam),
+        dataType:"json",
+        contentType:"application/json",
+        success:function(data){
+            var paperdata=data.data;
+            for(let i=0;i<paperdata.length;i++){
+                $.ajax({
+                    type:"POST",
+                    url:"http://localhost:8069/answer/getByUser",
+                    data:JSON.stringify({"userId":parent.userid,"examId":parent.examid}),
+                    dataType:"json",
+                    contentType:"application/json",
+                    success:function(data){
+                        for(let k=0;k<data.data.answer.length;k++){
+                            if(data.data.answer[k].questionId==paperdata[i].id){
+                                var answerdata=data.data.answer[k];
+                                setTimeout(function(){
+                                    if(paperdata[i].type==1){
+                                        var content=paperdata[i].content.split("|");
+                                        var questiontext='<div class="layui-form-item">'+
+                                            '<div id="question'+paperdata[i].id+'" class="layui-input-block question" data-id="'+answerdata.id+'" data-answer="'+paperdata[i].answer+'" data-score="'+paperdata[i].score+'">'+
+                                            '<p>'+(i+1)+'、'+content[0]+'</p><br>';
+                                        for(var j=1;j<content.length;j++){
+                                            questiontext+='<div>'+String.fromCharCode((64+j))+'.'+content[j]+'</div><br>';
+                                        }
+                                        questiontext+='<div class="layui-form-item"><label class="layui-form-label">提交答案</label><label class="layui-form-label">'+answerdata.content+'</label></div>';
+                                        questiontext+='<div class="layui-form-item"><label class="layui-form-label">标准答案</label><label class="layui-form-label">'+paperdata[i].answer+'</label></div>';
+                                        questiontext+='<div class="layui-form-item"><div class="layui-inline"><label class="layui-form-label">分数</label><div class="layui-input-block"><input name="question'+paperdata[i].id+'" class="layui-input" type="text"></div></div></div>';
+                                        questiontext+='</div></div>';
+                                        $("#form").append(questiontext);
+                                        form.render();
+                                        var param={};
+                                        param['question'+paperdata[i].id]=answerdata.score;
+                                        form.val('exam',param);
+                                    }
+                                    if(paperdata[i].type==2){
+                                        var answer=paperdata[i].answer.split(/[,，]/);
+                                        var questiontext='<div class="layui-form-item">'+
+                                            '<div id="question'+paperdata[i].id+'" class="layui-input-block question" data-id="'+answerdata.id+'" data-answer="'+paperdata[i].answer+'" data-score="'+paperdata[i].score+'">'+
+                                            '<p>'+(i+1)+'、'+paperdata[i].content+'</p><br>';
+                                        questiontext+='<div class="layui-form-item"><label class="layui-form-label">提交答案</label><label class="layui-form-label" style="width:80%;text-align:left;">'+answerdata.content+'</label></div>';
+                                        questiontext+='<div class="layui-form-item"><label class="layui-form-label">标准答案</label><label class="layui-form-label" style="width:80%;text-align:left;">'+paperdata[i].answer+'</label></div>';
+                                        questiontext+='<div class="layui-form-item"><div class="layui-inline"><label class="layui-form-label">分数</label><div class="layui-input-block"><input name="question'+paperdata[i].id+'" class="layui-input" type="text"></div></div></div>';
+                                        questiontext+='</div></div>';
+                                        $("#form").append(questiontext);
+                                        form.render();
+                                        var param={};
+                                        param['question'+paperdata[i].id]=answerdata.score;
+                                        form.val('exam',param);
+                                    }
+                                    if(paperdata[i].type==3){
+                                        var content=paperdata[i].content.split("|")
+                                        var questiontext='<div class="layui-form-item">'+
+                                            '<div id="question'+paperdata[i].id+'" class="layui-input-block question" data-id="'+answerdata.id+'" data-answer="'+paperdata[i].answer+'" data-score="'+paperdata[i].score+'">'+
+                                            '<p>'+(i+1)+'、'+content[0]+'</p><br>';
+                                        for(var j=1;j<content.length;j++){
+                                            questiontext+='<div>'+String.fromCharCode((64+j))+'.'+content[j]+'</div><br>';
+                                        }
+                                        questiontext+='<div class="layui-form-item"><div class="layui-inline"><label class="layui-form-label">提交答案</label><label class="layui-form-label">'+answerdata.content+'</label></div></div>';
+                                        questiontext+='<div class="layui-form-item"><div class="layui-inline"><label class="layui-form-label">标准答案</label><label class="layui-form-label">'+paperdata[i].answer+'</label></div></div>';
+                                        questiontext+='<div class="layui-form-item"><div class="layui-inline"><label class="layui-form-label">分数</label><div class="layui-input-block"><input name="question'+paperdata[i].id+'" class="layui-input" type="text"></div></div></div>';
+                                        questiontext+='</div></div>';
+                                        $("#form").append(questiontext);
+                                        
+                                        form.render();
+                                        var param={};
+                                        param['question'+paperdata[i].id]=answerdata.score;
+                                        form.val('exam',param);
+                                    }
+                                    if(paperdata[i].type==4){
+                                        var questiontext='<div class="layui-form-item">'+
+                                            '<div id="question'+paperdata[i].id+'" class="layui-input-block question" data-id="'+answerdata.id+'" data-answer="'+paperdata[i].answer+'" data-score="'+paperdata[i].score+'">'+
+                                            '<p>'+(i+1)+'、'+paperdata[i].content+'</p><br>';
+                                        questiontext+='<div class="layui-form-item"><label class="layui-form-label">提交答案</label><label class="layui-form-label" style="width:80%;text-align:left;">'+answerdata.content+'</label></div>';
+                                        questiontext+='<div class="layui-form-item"><label class="layui-form-label">标准答案</label><label class="layui-form-label" style="width:80%;text-align:left;">'+paperdata[i].answer+'</label></div>';
+                                        questiontext+='<div class="layui-form-item"><div class="layui-inline"><label class="layui-form-label">分数</label><div class="layui-input-block"><input name="question'+paperdata[i].id+'" class="layui-input" type="text"></div></div></div>';
+                                        questiontext+='</div></div>';
+                                        $("#form").append(questiontext);
+                                        form.render();
+                                        var param={};
+                                        param['question'+paperdata[i].id]=answerdata.score;
+                                        form.val('exam',param);
+                                    }
+                                },i*100)
+                                
+                            }
+                        }
+                    }
+                });
+                console.log(paperdata[i])
+            }
+        }
+    });
+    
+    //监听提交
+    form.on('submit(demo1)', function(data){
+        data=data.field;
+        layer.confirm('是否确认提交批改', function (index) {
+            for(var item in data){
+                var questionid=Number(item.slice(8));
+                var param={};
+                param.questionid=questionid;
+                param.examId=parent.examid;
+                param.userId=parent.userid;
+                param.id=Number($("#"+item).attr("data-id"));
+                param.score=Number(data[item]);
+                param.isCheck=1;
+                var submitflag=0;
+                $.ajax({
+                    type:"POST",
+                    url:"http://localhost:8069/answer/edit",
+                    data:JSON.stringify(param),
+                    dataType:"json",
+                    contentType:"application/json",
+                    success:function(data){
+                        if(submitflag==0){
+                            layer.msg('提交成功', {
+                                time: 1000,
+                            });
+                            setTimeout(function(){
+                                layer.closeAll();
+                                parent.layer.closeAll();
+                            },1000)
+                            submitflag=1;
+                        }
+                        $("#search",parent.document).click();
+                    }
+                });
+            }
+            
+        });
+        return false;
+    });
+});
+</script>
+</body>
+</html>
