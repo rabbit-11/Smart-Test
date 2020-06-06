@@ -57,6 +57,7 @@
 <script>
     var questionid=0;
     var totalscore=0;
+    var scoreid=0;
     layui.use(['table','jquery','cookie'], function () {
         var $ = layui.jquery,
             cookie = layui.cookie,
@@ -157,6 +158,7 @@
             var data = obj.data;
             if (obj.event === 'edit') {
                 questionid=data.id;
+                console.log(data)
                 var index = layer.open({
                     title: '编辑题目',
                     type: 2,
