@@ -30,6 +30,23 @@
 <body>
 <div class="layui-card" style="width:100%;min-height:500px">
     <div class="layui-card-header"></i>2019-2020第2学期</div>
+    <div style="margin: 10px 10px 10px 10px">
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">选择班级</label>
+                    <div class="layui-input-block">
+                        <select id="class" name="class" lay-filter="class">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="layui-card-body">
         <div id="echarts-records" style="width: 40%;min-height:300px;float:left;margin-left:60px;margin-top:40px"></div>
     </div>
@@ -165,6 +182,55 @@ layui.use(['echarts'], function () {
             range.resize();
         }
 });
+layui.use(['form', 'table','jquery','cookie'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            cookie = layui.cookie;
+        // var tableurl=;
+        // console.log(tableurl)
+
+        $.ajax({
+            type:"GET",
+            url:"http://localhost:8069/user/getClass?id="+$.cookie("id"),
+            // data:JSON.stringify(loginparam),
+            dataType:"json",
+            contentType:"application/json",
+            success:function(data){
+                var select=$("#class").html();
+                for(var i=0;i<data.data.length;i++){
+                    select+='<option value="'+data.data[i].id+'">'+data.data[i].className+'</option>';
+                }
+                $("#class").html(select);
+                form.render();
+            }
+        });
+
+        form.on('submit(data-search-btn)', function (data) {
+            $(".layui-table").removeClass("hidden")
+            return false;
+        });
+        form.on('select(class)', function (data) {
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8069/exam/getByClass?classId="+data.value,
+                // data:JSON.stringify(loginparam),
+                dataType:"json",
+                contentType:"application/json",
+                success:function(data){
+                    console.log(data)
+                    var select='<option value=""></option>';
+                    for(var i=0;i<data.data.length;i++){
+                        select+='<option value="'+data.data[i].id+'">'+data.data[i].paperName+'</option>';
+                    }
+                    $("#exam").html(select);
+                    form.render();
+                }
+            });
+        });
+
+
+    });
 </script>
 </body>
 </html>
