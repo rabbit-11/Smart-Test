@@ -49,7 +49,7 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-icon layui-icon-vercode" for="captcha"></label>
-                    <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification captcha" value="xszg">
+                    <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification captcha">
                     <div class="captcha-img">
                         <img id="captchaPic" src="images/captcha.jpg">
                     </div>
@@ -111,6 +111,10 @@
             }
             if (logindata.captcha == '') {
                 layer.msg('验证码不能为空');
+                return false;
+            }
+            if (logindata.captcha != 'xszg') {
+                layer.msg('验证码错误');
                 return false;
             }
             var param = JSON.stringify(logindata);
