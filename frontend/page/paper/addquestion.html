@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加题目</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        .layui-form-item .layui-input-company {width: auto;padding-right: 10px;line-height: 38px;}
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <form class="layui-form" action="" lay-filter="example">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">题库</label>
+                <div class="layui-input-block">
+                    <select id="library" name="library" lay-filter="library" lay-verify="required" lay-reqtext="题库不能为空">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">题目</label>
+                <div class="layui-input-block">
+                    <select id="question" name="question" lay-filter="question" lay-verify="required" lay-reqtext="题目不能为空">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">分值</label>
+                <div class="layui-input-block">
+                    <input name="score" lay-verify="required" lay-reqtext="分值不能为空" placeholder="请输入题目分值"  value="" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认添加</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['form','cookie','jquery','layer'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer,
+            cookie = layui.cookie;
+
+        console.log(parent.parent.paperid);
+        $.ajax({
+            type:"POST",
+            url:"http://localhost:8069/library/getAll",
+            data:JSON.stringify({"creator":$.cookie("id")}),
+            dataType:"json",
+            contentType:"application/json",
+            success:function(data){
+                var select='<option value=""></option>';
+                for(var i=0;i<data.data.length;i++){
+                    select+='<option value="'+data.data[i].id+'">'+data.data[i].name+'</option>';
+                }
+                $("#library").html(select);
+                form.render();
+            }
+        });
+
+        form.on('select(library)',function(data){
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8069/library/getAllQuestion?id="+data.value,
+                // data:JSON.stringify(loginparam),
+                dataType:"json",
+                contentType:"application/json",
+                success:function(data){
+                    var select='<option value=""></option>';
+                    for(var i=0;i<data.data.length;i++){
+                        select+='<option value="'+data.data[i].id+'">'+data.data[i].content.split("|")[0]+'</option>';
+                    }
+                    $("#question").html(select);
+                    form.render();
+                }
+            });
+        });
+
+        form.on('submit(saveBtn)', function (data) {
+            var param={};
+            param.questionId=data.field.question;
+            param.score=data.field.score;
+            param.paperId=parent.parent.paperid;
+            $.ajax({
+                type:"POST",
+                url:"http://localhost:8069/paper/addQuestion",
+                data:JSON.stringify(param),
+                dataType:"json",
+                contentType:"application/json",
+                success:function(data){
+                    var index = layer.alert("插入题目成功", {
+                        title: '成功'
+                    }, function () {
+                        layer.close(index);
+                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(iframeIndex);
+                        parent.totalscore=0;
+                        $("#show",parent.document).click();
+                    });
+                }
+            });
+            return false;
+        });
+        
+    });
+</script>
+</body>
+</html>

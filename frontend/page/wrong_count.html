@@ -1,10 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>wrong_count</title>
+    <meta charset="utf-8">
+    <title>图标列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        h4{ font-size:18px;font-family:"Microsoft YaHei","Simsun",Arial; font-weight:normal; line-height:1; padding:0; margin:0;}
+        .icons li{  margin:5px 0; text-align:center; height:120px; cursor:pointer;}
+        .icons li i{ display:block; font-size:35px; margin:10px 0; line-height:60px; height:60px;}
+        .icons li:hover{ background:#2f4056; border-radius:5px; color:#fff;}
+        .icons li:hover i{ font-size:50px;}
+        .section{ padding:20px;}
+        .section h4 span{ color:#0084e9;}
+        .fa {font-size: 25px !important;}
+        .fa:hover {font-size: 50px !important;}
+    </style>
 </head>
 <body>
-<p>错题统计</p>
+<div class="layui-card">
+    <div class="layui-card-header">错题统计</div>
+    <div class="layui-card-body">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">选择科目</label>
+                            <div class="layui-input-block">
+                                <select id="class" name="class" lay-filter="class">
+                                    <option value="">c语言程序设计基础</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">选择章节</label>
+                            <div class="layui-input-block">
+                                <select id="exam" name="exam" lay-filter="exam">
+                                    <option value="">第一章</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-sm data-count-detail" lay-event="detail"><i class="layui-icon layui-icon-form"></i>详情</a>
+            <a class="layui-btn layui-btn-sm layui-btn-danger data-count-delete" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        </script>
+
+    </div>
+<div style="margin-left:10px">
+    <p>错题一</p>
+    <img src="../images/221.jpg" style="width:500px;height:200px;margin-top:10px">
+</div>
+    <div style="margin-left:10px">
+        <p>错题二</p>
+        <img src="../images/222.jpg" style="width:500px;height:200px;margin-top:10px">
+    </div>
+</div>
+<div>
+    <div id="page_container"></div>
+</div>
+<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table','jquery','cookie'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            cookie = layui.cookie;
+        // var tableurl=;
+        // console.log(tableurl)
+
+        $.ajax({
+            type:"GET",
+            url:"http://localhost:8069/user/getClass?id="+$.cookie("id"),
+            // data:JSON.stringify(loginparam),
+            dataType:"json",
+            contentType:"application/json",
+            success:function(data){
+                var select=$("#class").html();
+                for(var i=0;i<data.data.length;i++){
+                    select+='<option value="'+data.data[i].id+'">'+data.data[i].className+'</option>';
+                }
+                $("#class").html(select);
+                form.render();
+            }
+        });
+
+        form.on('submit(data-search-btn)', function (data) {
+            $(".layui-table").removeClass("hidden")
+            return false;
+        });
+        form.on('select(class)', function (data) {
+            $.ajax({
+                type:"GET",
+                url:"http://localhost:8069/exam/getByClass?classId="+data.value,
+                // data:JSON.stringify(loginparam),
+                dataType:"json",
+                contentType:"application/json",
+                success:function(data){
+                    console.log(data)
+                    var select='<option value=""></option>';
+                    for(var i=0;i<data.data.length;i++){
+                        select+='<option value="'+data.data[i].id+'">'+data.data[i].paperName+'</option>';
+                    }
+                    $("#exam").html(select);
+                    form.render();
+                }
+            });
+        });
+
+
+    });
+</script>
+
 </body>
 </html>

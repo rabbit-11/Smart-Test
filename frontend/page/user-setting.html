@@ -21,22 +21,22 @@
         <div class="layui-row layui-col-space15" style="margin: 50px 0px 0px 30px;">
             <div class="layui-col-md3">
                 <div class="layui-row" style="margin-bottom: 20px;">
-                    <img src="../images/touxiang.jpg" class="touxiang">
+                    <img id="avatar" src="../images/touxiang.jpg" class="touxiang">
                 </div>
-                <div class="layui-row" style="margin-left:15px;"><button type="button" class="layui-btn layui-btn-normal">修改头像</button></div>
+                <div class="layui-row" style="margin-left:15px;"><button type="button" id="user-avatar" class="layui-btn layui-btn-normal">修改头像</button></div>
             </div>
             <div class="layui-col-md3">
                 <div class="layui-row">
                     <div class="layui-col-md4"><label>姓名：</label></div>
-                    <div class="layui-col-md8"><label id="name">许成</label></div>
+                    <div class="layui-col-md8"><label id="name"></label></div>
                 </div>
                 <div class="layui-row">
                     <div class="layui-col-md4"><label>绑定手机：</label></div>
-                    <div class="layui-col-md8"><label id="phonenumber">13867039514</label></div>
+                    <div class="layui-col-md8"><label id="mobile"></label></div>
                 </div>
                 <div class="layui-row">
-                    <div class="layui-col-md4"><label>身份证号：</label></div>
-                    <div class="layui-col-md8"><label id="idcard">330XXXXXXXXXXXXXXX</label></div>
+                    <div class="layui-col-md4"><label>身份：</label></div>
+                    <div class="layui-col-md8"><label id="role"></label></div>
                 </div>
                 <div class="layui-row">
                     <div class="layui-col-md4"><label>用户密码：</label></div>
@@ -46,57 +46,114 @@
             <div class="layui-col-md3">
                 <div class="layui-row" style="margin-bottom: 20px;">
                     <div class="layui-col-md4"><label>性别：</label></div>
-                    <div class="layui-col-md8"><label id="sex">男</label></div>
+                    <div class="layui-col-md8"><label id="sex"></label></div>
                 </div>
                 <div class="layui-row buttonrow"style="margin-bottom: 15px;">
-                    <button type="button" class="layui-btn layui-btn-normal">解除绑定</button>
+                    <button id="user-mobile" class="layui-btn layui-btn-normal">修改手机</button>
                 </div>
                 <div class="layui-row">
                     &emsp;
                 </div>
                 <div class="layui-row buttonrow">
-                    <button type="button" class="layui-btn layui-btn-normal" id="changepassword" data-method="changepassword">修改密码</button>
+                    <button id="user-password" class="layui-btn layui-btn-normal">修改密码</button>
                 </div>
             </div>
         </div>
-        <div class="layui-row layui-col-space15" style="margin: 50px 0px 0px 30px;">
-            
-        </div>
-        
+        <div id="touxiang" style="display: none;"></div>
     </div>
 </div>
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
-    layui.use(['layer'], function () {
-        var $ = layui.jquery, layer = layui.layer;
-
-        var active = {
-            changepassword: function(){
-                layer.open({
-                    type: 2
-                    , title: false //不显示标题栏
-                    , area: ['600px', '400px']
-                    , shade: 0.8
-                    , id: 'LAY_password' //设定一个id，防止重复弹出
-                    , content: 'passwordlayer.html'
-                    , btn: ['确认修改', '取消'] //只是为了演示
-                    , yes: function () {
-
-                    }
-                    , btn2: function () {
-                        
-                    }
-                    , success: function (layero) {
-                        
-                    }
-                })
+    layui.use(['layer','cookie'], function () {
+        var $ = layui.jquery, layer = layui.layer, cookie = layui.cookie;
+        var url=$.cookie("role")=="0"?"../api/initstudent.json":"../api/initteacher.json";
+        $("#name").html($.cookie("username"));
+        $("#mobile").html($.cookie("mobile"));
+        $("#role").html($.cookie("role")=="0"?"学生":"教师");
+        $("#sex").html($.cookie("sex")=="0"?"女":"男");
+        
+        var loginparam={};
+        loginparam.mobile=$.cookie("mobile");
+        loginparam.password=$.cookie("password");
+        console.log(loginparam)
+        $.ajax({
+            type:"POST",
+            url:"http://localhost:8069/user/login",
+            data:JSON.stringify(loginparam),
+            dataType:"json",
+            contentType:"application/json",
+            success:function(data){
+                if(data.data.avatar!="") $("#avatar").attr("src",data.data.avatar);
             }
-        }
-        $('#changepassword').on('click', function () {
-            var othis = $(this), method = othis.data('method');
-            active[method] ? active[method].call(this, othis) : '';
         });
+        $('#user-avatar').on('click', function () {
+            var index = layer.open({
+                title: '选择头像',
+                type: 2,
+                shade: 0.2,
+                shadeClose: true,
+                area: ['300px', '300px'],
+                content: 'user-avatar.html',
+                btn: ['确认'],
+                yes: function () {
+                    var param={};
+                    param.id=$.cookie("id");
+                    param.name=$.cookie("username");
+                    param.avatar=$("#touxiang").html();
+                    console.log(param)
+                    $.ajax({
+                        type:"POST",
+                        url:"http://localhost:8069/user/edit",
+                        data:JSON.stringify(param),
+                        dataType:"json",
+                        contentType:"application/json",
+                        success:function(data){
+                            if(data.status==200){
+                                $("#avatar").attr("src",$("#touxiang").html());
+                                $("#headeravatar",parent.document).attr("src",$("#touxiang").html());
+                                var index = layer.alert("修改头像成功", {
+                                    title: '成功'
+                                }, function () {
+                                    layer.closeAll();
+                                });
+                            }
+                        }
+                    });
+                },
+            });
+        });
+        $('#user-password').on('click', function () {
+            var index = layer.open({
+                title: '修改密码',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['100%', '100%'],
+                content: 'user-password.html',
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+        });
+        $('#user-mobile').on('click', function () {
+            var index = layer.open({
+                title: '修改绑定手机',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['100%', '100%'],
+                content: 'user-mobile.html',
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+        });
+
+        
+
     });
 </script>
 </body>

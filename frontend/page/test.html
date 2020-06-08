@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>进入考试</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        h4{ font-size:18px;font-family:"Microsoft YaHei","Simsun",Arial; font-weight:normal; line-height:1; padding:0; margin:0;}
+        .icons li{  margin:5px 0; text-align:center; height:120px; cursor:pointer;}
+        .icons li i{ display:block; font-size:35px; margin:10px 0; line-height:60px; height:60px;}
+        .icons li:hover{ background:#2f4056; border-radius:5px; color:#fff;}
+        .icons li:hover i{ font-size:50px;}
+        .section{ padding:20px;}
+        .section h4 span{ color:#0084e9;}
+        .fa {font-size: 25px !important;}
+        .fa:hover {font-size: 50px !important;}
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <form class="layui-form" action="" lay-filter="exam">
+            <div id="form" class="layui-form-item">
+                
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" type="submit" lay-filter="demo1" lay-submit="">立即提交</button>
+                        <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <div id="page_container"></div>
+</div>
+<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+layui.use(['jquery','cookie','form','layer','miniTab'], function(){
+    var $ = layui.jquery
+        form = layui.form,
+        cookie = layui.cookie,
+        layer = layui.layer,
+        miniTab = layui.miniTab;
+    $.ajax({
+        type:"POST",
+        url:"http://localhost:8069/answer/getByUser",
+        data:JSON.stringify({"userId":Number($.cookie("id")),"examId":Number($.cookie("examid"))}),
+        dataType:"json",
+        contentType:"application/json",
+        success:function(data){
+            if(data.data.answer.length>0){
+                layer.msg('已参加该考试', {
+                    time: 1000,
+                });
+                setTimeout(function(){
+                    layer.closeAll();
+                    miniTab.deleteCurrentByIframe();
+                },1000)
+            }
+        }
+    });
+    $.ajax({
+        type:"GET",
+        url:"http://localhost:8069/question/selectByPaper?id="+$.cookie("paperid"),
+        // data:JSON.stringify(loginparam),
+        dataType:"json",
+        contentType:"application/json",
+        success:function(data){
+            var data=data.data;
+            for(var i=0;i<data.length;i++){
+                if(data[i].type==1){
+                    var content=data[i].content.split("|")
+                    var questiontext='<div class="layui-form-item">'+
+                        '<div id="question'+data[i].id+'" class="layui-input-block question" data-type="0" data-answer="'+data[i].answer+'" data-score="'+data[i].score+'">'+
+                        '<p>'+(i+1)+'、'+content[0]+'</p><br>';
+                    for(var j=1;j<content.length;j++){
+                        questiontext+='<input name="question'+data[i].id+'" title="'+String.fromCharCode((64+j))+'.'+content[j]+'" type="radio" value="'+String.fromCharCode((64+j))+'"><br>';
+                    }
+                    questiontext+='</div></div>';
+                    $("#form").append(questiontext);
+                    form.render();
+                }
+                if(data[i].type==2){
+                    var answer=data[i].answer.split(/[,，]/);
+                    var questiontext='<div class="layui-form-item">'+
+                        '<div id="question'+data[i].id+'" class="layui-input-block question" data-type="1"  data-answer="'+data[i].answer+'" data-score="'+data[i].score+'">'+
+                        '<p>'+(i+1)+'、'+data[i].content+'</p><br>';
+                    for(var j=0;j<answer.length;j++){
+                        questiontext+='<input name="question'+data[i].id+'['+(j+1)+']" class="layui-input" type="text" placeholder="第'+(j+1)+'空"><br>';
+                    }
+                    questiontext+='</div></div>';
+                    $("#form").append(questiontext);
+                    form.render();
+                }
+                if(data[i].type==3){
+                    var content=data[i].content.split("|")
+                    var questiontext='<div class="layui-form-item">'+
+                        '<div id="question'+data[i].id+'" class="layui-input-block question" data-type="0" data-answer="'+data[i].answer+'" data-score="'+data[i].score+'">'+
+                        '<p>'+(i+1)+'、'+content[0]+'</p><br>';
+                    for(var j=1;j<content.length;j++){
+                        questiontext+='<input name="question'+data[i].id+'['+j+']" title="'+String.fromCharCode((64+j))+'.'+content[j]+'" type="checkbox" lay-skin="primary" value="'+String.fromCharCode((64+j))+'"><br>';
+                    }
+                    
+                    questiontext+='</div></div>';
+                    $("#form").append(questiontext);
+                    form.render();
+                }
+                if(data[i].type==4){
+                    var questiontext='<div class="layui-form-item">'+
+                        '<div id="question'+data[i].id+'" class="layui-input-block question" data-type="0" data-answer="'+data[i].answer+'" data-score="'+data[i].score+'">'+
+                        '<p>'+(i+1)+'、'+data[i].content+'</p><br>'+
+                        '<textarea name="question'+data[i].id+'" class="layui-textarea" placeholder="请输入答案"></textarea></div></div>';
+                    $("#form").append(questiontext);
+                    form.render();
+                }
+                console.log(data[i])
+            }
+        }
+    });
+    
+    //监听提交
+    form.on('submit(demo1)', function(data){
+        layer.confirm('是否确认提交答卷', function (index) {
+            var question = $(".question");
+            for(var i=0;i<question.length;i++){
+                var content=[];
+                for(var item in data.field){
+                    if(item.indexOf($(question[i]).attr("id"))!=-1){
+                        content.push(data.field[item]);
+                    }
+                }
+                if($(question[i]).attr("data-type")=="0") content=content.join("");
+                else content=content.join(",");
+                var param={};
+                param.userId=$.cookie("id");
+                param.examId=$.cookie("examid");
+                param.questionId=Number($(question[i]).attr("id").slice(8));
+                param.content=content;
+                param.score=0;
+                if($(question[i]).attr("data-type")=="1"){
+                    var answer=$(question[i]).attr("data-answer");
+                    var score=$(question[i]).attr("data-score");
+                    content=content.split(",");
+                    answer=answer.split(/[,，]/);
+                    for(var j=0;j<content.length;j++){
+                        var allanswer=answer[j].split("、");
+                        for(var k=0;k<allanswer.length;k++){
+                            if(content[j]==allanswer[k]) param.score+=Number(score)/answer.length;
+                        }
+                    }
+                }
+                else{
+                    var answer=$(question[i]).attr("data-answer");
+                    var score=$(question[i]).attr("data-score");
+                    if(content==answer){
+                        param.score=Number(score)
+                    }
+                }
+                console.log(param);
+                var submitflag=0;
+                $.ajax({
+                    type:"POST",
+                    url:"http://localhost:8069/answer/add",
+                    data:JSON.stringify(param),
+                    dataType:"json",
+                    contentType:"application/json",
+                    success:function(data){
+                        if(submitflag==0){
+                            layer.msg('提交成功', {
+                            time: 1000,
+                            });
+                            setTimeout(function(){
+                                layer.closeAll();
+                                $('[data-refresh="刷新"]',parent.document).click();
+                                miniTab.deleteCurrentByIframe();
+                            },1000)
+                            submitflag=1;
+                        }
+                    }
+                });
+            }
+        });
+        return false;
+    });
+
+
+
+});
+</script>
+</body>
+</html>

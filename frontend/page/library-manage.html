@@ -43,15 +43,24 @@
                     <form class="layui-form layui-form-pane" action="">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">选择班级</label>
+                                <label class="layui-form-label">选择题库</label>
                                 <div class="layui-input-block">
-                                    <select id="class" name="class" lay-filter="class" lay-verify="required" lay-reqtext="请先选择班级">
+                                    <select id="library" name="library" lay-filter="library" lay-verify="required" lay-reqtext="请先选择题库">
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <button id="search" type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜索考试安排 </button>
+                                <button id="search" type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜索题目</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="addlibrary" class="layui-btn layui-btn-primary"><i class="layui-icon layui-icon-addition"></i> 新建题库</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-edit-btn"><i class="layui-icon layui-icon-edit"></i> 编辑题库</button>
+                            </div>
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-delete-btn"><i class="layui-icon layui-icon-delete"></i> 删除题库</button>
                             </div>
                         </div>
                     </form>
@@ -74,43 +83,119 @@
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
-    var classid=0;
-    var examid=0;
-    var paperid=0;
-    var name="";
-    var startTime="";
-    var endTime="";
+    var libraryid=0;
+    var questionid=0;
+    var questioncontent="";
+    var questiontype="";
+    var questionanswer="";
+    var table="";
+    var form="";
     layui.use(['form', 'table','jquery','cookie'], function () {
         var $ = layui.jquery,
-            cookie = layui.cookie,
-            form = layui.form,
-            table = layui.table;
+            cookie = layui.cookie;
+
+        form = layui.form;
+        table = layui.table;
         // var tableurl=;
         // console.log(tableurl)
-        // var param={};
-        // param.creator=$.cookie("id");
+        var param={};
+        param.creator=$.cookie("id");
 
         $.ajax({
-            type:"GET",
-            url:"http://localhost:8069/class/getClassByTeacher?id="+$.cookie("id"),
-            // data:JSON.stringify(param),
+            type:"POST",
+            url:"http://localhost:8069/library/getAll",
+            data:JSON.stringify(param),
             dataType:"json",
             contentType:"application/json",
             success:function(data){
-                var select=$("#class").html();
+                var select=$("#library").html();
                 for(var i=0;i<data.data.length;i++){
                     select+='<option value="'+data.data[i].id+'">'+data.data[i].name+'</option>';
                 }
-                $("#class").html(select);
+                $("#library").html(select);
                 form.render();
             }
         });
-        
+        form.on('select(library)', function (data) {
+            libraryid=Number(data.value);
+        });
+        $("#addlibrary").on('click', function (data) {
+            libraryid=0;
+            var index = layer.open({
+                title: '添加题库',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['100%', '100%'],
+                content: 'question/addlibrary.html',
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+            return false;
+        });
+        form.on('submit(data-edit-btn)', function (data) {
+            libraryid=data.field.library;
+            var index = layer.open({
+                title: '修改题库',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['100%', '100%'],
+                content: 'question/addlibrary.html',
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+            return false;
+        });
+        form.on('submit(data-delete-btn)', function (data) {
+            layer.confirm('是否确认删除此消息', function (index) {
+                $.ajax({
+                    type:"GET",
+                    url:"http://localhost:8069/library/delete?id="+libraryid,
+                    // data:JSON.stringify(loginparam),
+                    dataType:"json",
+                    contentType:"application/json",
+                    success:function(data){
+                        layer.msg('删除成功', {
+                            time: 1000,
+                        });
+                        setTimeout(function(){
+                            layer.closeAll();
+                            obj.del();
+                        },1000)
+                        $.ajax({
+                            type:"POST",
+                            url:"http://localhost:8069/library/getAll",
+                            data:JSON.stringify({"creator":$.cookie("id")}),
+                            dataType:"json",
+                            contentType:"application/json",
+                            success:function(data){
+                                var select='<option value=""></option>';
+                                for(var i=0;i<data.data.length;i++){
+                                    select+='<option value="'+data.data[i].id+'">'+data.data[i].name+'</option>';
+                                }
+                                $("#library").html(select);
+                                form.render();
+                            }
+                        });
+                    },
+                    error:function(data){
+                        layer.msg('删除失败', {
+                            time: 1000
+                        });
+                    }
+                });
+            });
+            return false;
+        });
         form.on('submit(data-search-btn)', function (data) {
-            classid=data.field.class;
             $.ajax({
                 type:"GET",
-                url:"http://localhost:8069/exam/getByClass?classId="+data.field.class,
+                url:"http://localhost:8069/library/getAllQuestion?id="+data.field.library,
                 // data:JSON.stringify(loginparam),
                 dataType:"json",
                 contentType:"application/json",
@@ -121,21 +206,28 @@
                         toolbar: '#toolbarDemo',
                         defaultToolbar: [],
                         cols: [[
-                            {field: 'name', width: "20%", title: '考试名称', sort: true, align: "center"},
-                            {field: 'paperName', width: "20%", title: '试卷名称', sort: true, align: "center"},
-                            // {field: 'type', width: "20%", title: '题目类别', align: "center",
-                            //     templet:function(data){
-                            //         switch(data.type){
-                            //             case 1:return "选择题"; break;
-                            //             case 2:return "填空题"; break;
-                            //             case 3:return "多选题"; break;
-                            //             case 4:return "简答题"; break;
-                            //         }
-                            //     }
-                            // },
-                            // {field: 'answer', width: "20%", title: '标准答案', sort: true, align: "center"},
-                            {field: 'startTime', width: "20%", title: '开始时间', sort: true, align: "center"},
-                            {field: 'endTime', width: "20%", title: '结束时间', sort: true, align: "center",},
+                            {field: 'content', width: "20%", title: '题目内容', sort: true, align: "center",
+                                templet:function(data){
+                                    return data.content.split("|")[0];
+                                }
+                            },
+                            {field: 'type', width: "20%", title: '题目类别', align: "center",
+                                templet:function(data){
+                                    switch(data.type){
+                                        case 1:return "选择题"; break;
+                                        case 2:return "填空题"; break;
+                                        case 3:return "多选题"; break;
+                                        case 4:return "简答题"; break;
+                                    }
+                                }
+                            },
+                            {field: 'answer', width: "20%", title: '标准答案', sort: true, align: "center"},
+                            {field: 'createAt', width: "20%", title: '创建时间', sort: true, align: "center",
+                                    templet:function(data){
+                                        var time=new Date(data.createAt);
+                                        return time.getFullYear()+"-"+townumber(time.getMonth()+1)+"-"+townumber(time.getUTCDate())+" "+townumber(time.getHours())+":"+townumber(time.getMinutes())+":"+townumber(time.getSeconds());
+                                    }
+                                },
                             {title: '操作', width: "20%", toolbar: '#currentTableBar', align: "center"}
                         ]],
                         limits: [10, 15, 20, 25, 50, 100],
@@ -151,13 +243,13 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
                 var index = layer.open({
-                    title: '添加考试',
+                    title: '添加题目',
                     type: 2,
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: 'exam/add.html',
+                    content: 'question/add.html',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -168,28 +260,27 @@
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
-                examid=data.id;
-                paperid=data.paperId;
-                startTime=data.startTime;
-                endTime=data.endTime;
-                name=data.name;
+                questionid=data.id;
+                questionanswer=data.answer;
+                questioncontent=data.content;
+                questiontype=data.type;
                 var index = layer.open({
                     title: '编辑题目',
                     type: 2,
                     shade: 0.2,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: 'exam/add.html',
+                    content: 'question/edit.html',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
                 return false;
             } else if (obj.event === 'delete') {
-                layer.confirm('是否确认删除此考试', function (index) {
+                layer.confirm('是否确认删除此题目', function (index) {
                     $.ajax({
                         type:"GET",
-                        url:"http://localhost:8069/exam/delete?id="+data.id,
+                        url:"http://localhost:8069/question/delete?id="+data.id,
                         // data:JSON.stringify(loginparam),
                         dataType:"json",
                         contentType:"application/json",
