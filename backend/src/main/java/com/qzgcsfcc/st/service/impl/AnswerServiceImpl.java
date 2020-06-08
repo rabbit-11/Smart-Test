@@ -2,6 +2,7 @@ package com.qzgcsfcc.st.service.impl;
 
 import com.qzgcsfcc.st.dao.AnswerMapper;
 import com.qzgcsfcc.st.model.Answer;
+import com.qzgcsfcc.st.model.dto.AnswerDto;
 import com.qzgcsfcc.st.model.param.ApiResult;
 import com.qzgcsfcc.st.service.AnswerService;
 import org.omg.PortableInterceptor.INACTIVE;
@@ -29,7 +30,7 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public ApiResult getByUser(Answer answer) {
-        List<Answer> answers = answerMapper.selectByUser(answer);
+        List<AnswerDto> answers = answerMapper.selectByUser(answer);
         ApiResult apiResult = new ApiResult();
         apiResult.success(initAnswers(answers));
         return apiResult;
@@ -56,14 +57,14 @@ public class AnswerServiceImpl implements AnswerService {
         return apiResult;
     }
 
-    private Integer cal(List<Answer> answers){
+    private Integer cal(List<AnswerDto> answers){
         Integer total = 0;
-        for (Answer answer : answers) {
+        for (AnswerDto answer : answers) {
             total += answer.getScore();
         }
         return total;
     }
-    private Map initAnswers(List<Answer> answers){
+    private Map initAnswers(List<AnswerDto> answers){
         Map res = new HashMap(2);
         Integer total = cal(answers);
         res.put("total",total);

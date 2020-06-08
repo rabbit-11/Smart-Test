@@ -42,6 +42,12 @@ public class PaperController {
     }
 
     @ResponseBody
+    @GetMapping("/selectByCreator")
+    public ApiResult selectByCreator(Integer id) {
+        return paperService.selectByCreator(id);
+    }
+
+    @ResponseBody
     @RequestMapping("/addQuestion")
     public ApiResult addQuestion(@RequestBody PaperQuestion paperQuestion) {
         return paperService.addQuestion(paperQuestion);

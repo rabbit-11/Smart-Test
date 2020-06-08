@@ -26,8 +26,17 @@
         select
         <include refid="Base_Column_List" />
         from question_library
-        left join question on question_library.questionId = question.id
+        left join question on question_library.question_id = question.id
         where question_library.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByPaper" parameterType="java.lang.Integer" resultType="com.qzgcsfcc.st.model.dto.QuestionDto">
+        select
+        <include refid="Base_Column_List" />,
+        paper_question.score
+        from paper_question
+        left join question on paper_question.question_id = question.id
+        where paper_question.paper_id = #{id,jdbcType=INTEGER}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -36,7 +45,7 @@
       where id = #{id,jdbcType=INTEGER}
     </delete>
 
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.qzgcsfcc.st.model.Question" useGeneratedKeys="true">
+    <insert id="insert" parameterType="com.qzgcsfcc.st.model.Question" useGeneratedKeys="true" keyProperty="id">
         insert into question
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="createAt != null">

@@ -20,4 +20,6 @@ public class Paper implements Serializable {
     private Integer score;
 
     private Integer status;
+
+    private Integer type;
 }

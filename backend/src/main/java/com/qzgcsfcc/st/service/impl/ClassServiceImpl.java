@@ -45,6 +45,18 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
+    public ApiResult getClassByTeacher(Integer id) {
+
+
+        List<ClassInfo> res = classMapper.selectByTeacherId(id);
+
+        ApiResult apiResult =  new ApiResult();
+
+        apiResult.success(res);
+        return apiResult;
+    }
+
+    @Override
     public ApiResult addStu(UserClass userClass) {
 
         userClassMapper.insert(userClass);

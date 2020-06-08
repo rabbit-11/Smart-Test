@@ -12,14 +12,21 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-      id, create_at, creator, `name`, score, `status`
+      id, create_at, creator, `name`, score, `status`,`type`
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from paper
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER} and status = 1
+    </select>
+
+    <select id="selectByCreator" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from paper
+        where creator = #{id,jdbcType=INTEGER} and status = 1
     </select>
 
     <insert id="insert" parameterType="com.qzgcsfcc.st.model.Paper">
@@ -43,6 +50,9 @@
             <if test="status != null">
                 `status`,
             </if>
+            <if test="type != null">
+                `type`,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -62,6 +72,9 @@
             </if>
             <if test="status != null">
                 #{status,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -83,6 +96,9 @@
             </if>
             <if test="status != null">
                 `status` = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

@@ -9,6 +9,8 @@ import com.qzgcsfcc.st.service.PaperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * <p>
@@ -65,6 +67,14 @@ public class PaperServiceImpl implements PaperService {
     public ApiResult delQuestion(PaperQuestion paperQuestion) {
         pqMapper.delete(paperQuestion);
         ApiResult apiResult = new ApiResult();
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult selectByCreator(Integer id) {
+        List<Paper> paper = paperMapper.selectByCreator(id);
+        ApiResult apiResult = new ApiResult();
+        apiResult.success(paper);
         return apiResult;
     }
 }

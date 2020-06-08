@@ -118,4 +118,6 @@ public class ApiResult implements Serializable {
     public boolean IsFail() {
         return this.status != 200;
     }
+
+
 }

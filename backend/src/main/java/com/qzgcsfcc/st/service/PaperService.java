@@ -22,4 +22,6 @@ public interface PaperService {
     ApiResult editQuestion(PaperQuestion paperQuestion);
 
     ApiResult delQuestion(PaperQuestion paperQuestion);
+
+    ApiResult selectByCreator(Integer id);
 }

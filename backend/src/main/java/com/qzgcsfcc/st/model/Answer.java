@@ -17,4 +17,6 @@ public class Answer {
     private String content;
 
     private Integer score;
+
+    private Integer isCheck;
 }

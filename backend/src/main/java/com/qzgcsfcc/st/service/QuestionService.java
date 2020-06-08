@@ -15,4 +15,6 @@ public interface QuestionService {
     ApiResult edit(Question question);
 
     ApiResult delete(Integer id);
+
+    ApiResult selectByPaper(Integer id);
 }

@@ -30,6 +30,12 @@ public class ClassController {
         return classService.getStu(id);
     }
 
+    @ResponseBody
+    @GetMapping("/getClassByTeacher")
+    public ApiResult getClassByTeacher(Integer id) {
+        return classService.getClassByTeacher(id);
+    }
+
 
     @ResponseBody
     @RequestMapping("/addStu")

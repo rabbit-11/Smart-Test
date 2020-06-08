@@ -2,6 +2,7 @@ package com.qzgcsfcc.st.service.impl;
 
 import com.qzgcsfcc.st.dao.MessageMapper;
 import com.qzgcsfcc.st.model.Message;
+import com.qzgcsfcc.st.model.dto.MessageDto;
 import com.qzgcsfcc.st.model.param.ApiResult;
 import com.qzgcsfcc.st.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public ApiResult getList(Integer id) {
-        List<Message> messages =  messageMapper.selectById(id);
+        List<MessageDto> messages =  messageMapper.selectById(id);
         ApiResult apiResult = new ApiResult();
         apiResult.success(messages);
         return apiResult;

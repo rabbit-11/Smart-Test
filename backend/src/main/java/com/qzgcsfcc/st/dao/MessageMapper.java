@@ -1,6 +1,7 @@
 package com.qzgcsfcc.st.dao;
 
 import com.qzgcsfcc.st.model.Message;
+import com.qzgcsfcc.st.model.dto.MessageDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 @Repository
 public interface MessageMapper {
 
-    List<Message> selectById(Integer id);
+    List<MessageDto> selectById(Integer id);
 
     int insert(Message message);
 

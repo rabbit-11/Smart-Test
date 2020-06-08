@@ -1,6 +1,7 @@
 package com.qzgcsfcc.st.dao;
 
 import com.qzgcsfcc.st.model.Answer;
+import com.qzgcsfcc.st.model.dto.AnswerDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 @Repository
 public interface AnswerMapper {
 
-    List<Answer> selectByUser(Answer answer);
+    List<AnswerDto> selectByUser(Answer answer);
 
     int insert(Answer answer);
 

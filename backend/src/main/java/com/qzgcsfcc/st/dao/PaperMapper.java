@@ -18,6 +18,8 @@ public interface PaperMapper {
 
     Paper selectByPrimaryKey(Integer id);
 
+    List<Paper> selectByCreator(Integer id);
+
     int insert(Paper paper);
 
     int deleteByPrimaryKey(Integer id);

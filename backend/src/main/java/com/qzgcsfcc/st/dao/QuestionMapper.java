@@ -21,9 +21,12 @@ public interface QuestionMapper {
 
     List<Question> selectByLibraryId(Integer id);
 
-    int insert(Question question);
+    Integer insert(Question question);
 
     int deleteByPrimaryKey(Integer id);
 
     int updateByPrimaryKey(Question usquestioner);
+
+    List<Question> selectByPaper(Integer id);
+
 }

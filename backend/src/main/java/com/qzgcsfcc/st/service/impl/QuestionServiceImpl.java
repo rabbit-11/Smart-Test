@@ -7,6 +7,8 @@ import com.qzgcsfcc.st.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * <p>
@@ -26,6 +28,7 @@ public class QuestionServiceImpl implements QuestionService {
     public ApiResult add(Question question) {
         questionMapper.insert(question);
         ApiResult apiResult = new ApiResult();
+        apiResult.setData(question.getId());
         return apiResult;
     }
 
@@ -40,6 +43,14 @@ public class QuestionServiceImpl implements QuestionService {
     public ApiResult delete(Integer id) {
         questionMapper.deleteByPrimaryKey(id);
         ApiResult apiResult = new ApiResult();
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult selectByPaper(Integer id) {
+        List<Question> questionList= questionMapper.selectByPaper(id);
+        ApiResult apiResult = new ApiResult();
+        apiResult.success(questionList);
         return apiResult;
     }
 }

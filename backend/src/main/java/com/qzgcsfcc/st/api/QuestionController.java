@@ -39,4 +39,10 @@ public class QuestionController {
     public ApiResult del(Integer id) {
         return questionService.delete(id);
     }
+
+    @ResponseBody
+    @GetMapping("/selectByPaper")
+    public ApiResult selectByPaper(Integer id) {
+        return questionService.selectByPaper(id);
+    }
 }

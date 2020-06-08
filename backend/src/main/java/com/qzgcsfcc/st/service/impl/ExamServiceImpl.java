@@ -54,13 +54,6 @@ public class ExamServiceImpl implements ExamService {
         return apiResult;
     }
 
-    @Override
-    public ApiResult getByUser(Integer id) {
-        List<ExamDto> exams = examMapper.selectByUser(id);
-        ApiResult apiResult = new ApiResult();
-        apiResult.success(exams);
-        return apiResult;
-    }
 
     @Override
     public ApiResult openExam(Integer id) {

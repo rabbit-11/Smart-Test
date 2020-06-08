@@ -8,21 +8,23 @@
         <result column="question_id" jdbcType="INTEGER" property="questionId" />
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="score" jdbcType="INTEGER" property="score" />
+        <result column="is_check" jdbcType="INTEGER" property="isCheck" />
     </resultMap>
 
     <sql id="Base_Column_List">
-       answer.id, answer.user_id, answer.exam_id, answer.question_id, answer.content, answer.score
+       answer.id, answer.user_id, answer.exam_id, answer.question_id, answer.content, answer.score,answer.is_check
     </sql>
 
-    <select id="selectByUser" parameterType="com.qzgcsfcc.st.model.Answer" resultType="com.qzgcsfcc.st.model.Answer">
+    <select id="selectByUser" parameterType="com.qzgcsfcc.st.model.Answer" resultType="com.qzgcsfcc.st.model.dto.AnswerDto">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>,
+        exam.is_read as isRead,
+        exam.paper_id as paperId
         from answer
         left join exam on answer.exam_id = exam.id
         <where>
             user_id = #{userId}
             and exam_id = #{examId}
-            and exam.is_read = 1
         </where>
     </select>
 
@@ -53,6 +55,9 @@
             <if test="score != null">
                 score,
             </if>
+            <if test="isCheck != null">
+                is_check,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -73,6 +78,9 @@
             <if test="score != null">
                 #{score,jdbcType=INTEGER},
             </if>
+            <if test="isCheck != null">
+                #{isCheck,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.qzgcsfcc.st.model.Answer">
@@ -92,6 +100,9 @@
             </if>
             <if test="score != null">
                 score = #{score,jdbcType=INTEGER},
+            </if>
+            <if test="isCheck != null">
+                is_check = #{isCheck,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

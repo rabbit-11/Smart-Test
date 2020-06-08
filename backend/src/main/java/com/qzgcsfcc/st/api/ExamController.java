@@ -47,11 +47,6 @@ public class ExamController {
         return examService.getByClass(classId);
     }
 
-    @ResponseBody
-    @GetMapping("/getByUser")
-    public ApiResult getByUser(Integer userId) {
-        return examService.getByUser(userId);
-    }
 
     @ResponseBody
     @GetMapping("/openExam")

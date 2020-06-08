@@ -19,6 +19,8 @@ public interface ClassService {
 
     ApiResult getStu(Integer id);
 
+    ApiResult getClassByTeacher(Integer id);
+
     ApiResult addStu(UserClass userClass);
 
     ApiResult deleteStu(UserClass userClass);

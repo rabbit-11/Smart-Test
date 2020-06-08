@@ -2,6 +2,7 @@ package com.qzgcsfcc.st.dao;
 
 import com.qzgcsfcc.st.model.Exam;
 import com.qzgcsfcc.st.model.dto.ExamDto;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,8 +27,6 @@ public interface ExamMapper {
     int updateByPrimaryKey(Exam exam);
 
     List<ExamDto> selectByClass(Integer id);
-
-    List<ExamDto> selectByUser(Integer id);
 
     int openExam(Integer id);
 }
