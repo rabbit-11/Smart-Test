@@ -28,25 +28,37 @@
 <div class="layui-card">
     <div class="layui-card-header">随机选题</div>
     <div class="layui-card-body">
-        <div>
-        <select name="lesson" lay-verify="">
-            <option value="">请选择课程</option>
-            <option value="010">软件工程</option>
-            <option value="021">软件工程实践</option>
-            <option value="0571">python程序设计</option>
-            <option value="0571">python程序设计实践</option>
-        </select>
-        </div>
-        <div style="margin-top:20px;margin-bottom:20px">
-            <select name="lesson" lay-verify="">
-                <option value="">请选择试卷</option>
-                <option value="010">第一套</option>
-                <option value="021">第二套</option>
-                <option value="0571">第三套</option>
-                <option value="0571">第四套</option>
-            </select>
-        </div>
-        <button type="button" class="layui-btn layui-btn-normal">开始练习</button>
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">选择班级</label>
+                    <div class="layui-input-block">
+                        <select id="class" name="class" lay-filter="class">
+                            <option value="">请选择班级</option>
+                            <option value="010">软件工程</option>
+                            <option value="021">软件工程实践</option>
+                            <option value="0571">python程序设计</option>
+                            <option value="0571">python程序设计实践</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">选择试卷</label>
+                    <div class="layui-input-block">
+                        <select name="lesson" lay-verify="">
+                            <option value="">请选择试卷</option>
+                            <option value="010">第一套</option>
+                            <option value="021">第二套</option>
+                            <option value="0571">第三套</option>
+                            <option value="0571">第四套</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>开始练习</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -57,5 +69,12 @@
 
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['form','jquery','cookie'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            cookie = layui.cookie;
+    });
+</script>
 </body>
 </html>
